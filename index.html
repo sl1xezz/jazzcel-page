@@ -24,46 +24,50 @@
 
         .banner { position: fixed; top: 0; left: 0; right: 0; background: #001a57; color: white; padding: 15px; text-align: center; font-size: 22px; font-weight: 900; letter-spacing: 5px; z-index: 1100; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
-        /* Sidebar Adaptable */
-        .sidebar { width: 260px; background: var(--bg-sidebar); margin: 85px 0 15px 15px; border-radius: 20px; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; overflow-y: auto; transition: 0.3s; }
+        /* Categorías / Sidebar */
+        .sidebar { width: 260px; background: var(--bg-sidebar); margin: 85px 0 15px 15px; border-radius: 20px; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; overflow-y: auto; }
         
-        /* Main Adaptable */
         .main { flex: 1; padding: 140px 30px 40px; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
 
-        /* --- RESPONSIVE / CELULARES --- */
+        /* --- RESPONSIVE CELULAR --- */
         @media (max-width: 768px) {
             body { flex-direction: column; overflow: auto; }
             .sidebar { 
-                width: 100%; margin: 60px 0 0 0; border-radius: 0; 
-                flex-direction: row; height: 65px; padding: 10px; overflow-x: auto; white-space: nowrap;
+                width: 100%; margin: 0; border-radius: 0; flex-direction: row; 
+                height: 70px; padding: 12px 10px; overflow-x: auto; white-space: nowrap;
+                position: fixed; top: 110px; background: #001a57; z-index: 1040;
             }
-            .category { padding: 8px 15px; font-size: 12px; flex-shrink: 0; }
-            .main { padding: 20px 15px 100px; overflow: visible; }
+            .category { padding: 8px 18px; font-size: 13px; flex-shrink: 0; background: rgba(255,255,255,0.1); }
+            .main { padding: 190px 15px 100px; overflow: visible; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .controls { position: relative; top: 0; right: 0; margin-bottom: 20px; width: 100%; display: flex; justify-content: space-between; }
+            .controls { 
+                position: fixed; top: 52px; left: 0; right: 0; width: 100%; 
+                background: var(--bg-body); padding: 10px 15px; z-index: 1050;
+                display: flex; justify-content: space-between; border-bottom: 1px solid var(--border);
+            }
             .search-box { width: 75%; }
-            .banner { font-size: 18px; padding: 10px; }
-            .price-filter-wrapper { display: none; } /* Filtro de precio se oculta en móvil por espacio */
+            .banner { font-size: 18px; padding: 12px; height: 52px; }
         }
 
-        /* Tus estilos originales de tarjetas */
-        .category { padding: 12px 15px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); font-size: 14px; }
+        /* Estilos Originales */
+        .category { color: white; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; transition: 0.3s; padding: 12px; }
         .category:hover, .category.active { background: white; color: #001a57; }
-        .card { background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; transition: 0.3s; border: 1px solid var(--border); cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; height: 320px; position: relative; }
-        .card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 10px; }
-        .price { font-size: 18px; font-weight: 800; color: var(--accent); margin: 5px 0; }
-        .fav-badge { position: absolute; top: 15px; right: 15px; font-size: 18px; color: #ccc; z-index: 5; }
+        .card { background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid var(--border); position: relative; display: flex; flex-direction: column; height: 360px; }
+        .card img { width: 100%; height: 130px; object-fit: contain; }
+        .price { font-size: 18px; font-weight: 800; color: var(--accent); margin: 8px 0; }
+        .fav-badge { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 18px; color: #ccc; }
         .fav-badge.active { color: var(--heart); }
-        .controls { position: fixed; top: 80px; right: 40px; z-index: 950; display: flex; gap: 10px; }
         .search-box { padding: 10px 20px; border-radius: 25px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); outline: none; }
-        .cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--success); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; z-index: 1500; }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
-        .modal-content { background: var(--bg-card); width: 95%; max-width: 600px; border-radius: 25px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .cart-float { position: fixed; bottom: 25px; right: 25px; background: var(--success); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1500; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px); padding: 15px; }
+        .modal-content { background: var(--bg-card); width: 100%; max-width: 600px; border-radius: 25px; padding: 25px; max-height: 90vh; overflow-y: auto; position: relative; }
         .spec-icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .spec-item { display: flex; align-items: center; gap: 8px; background: var(--bg-specs); padding: 8px; border-radius: 10px; font-size: 12px; }
-        .btn-wa { background: var(--success); color: white; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; margin-top: 10px; }
+        .spec-item { background: var(--bg-specs); padding: 10px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+        .btn-wa { background: var(--success); color: white; padding: 14px; border-radius: 12px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; margin-top: 15px; }
+        .review-section { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 15px; }
+        .stars { color: var(--stars); margin-bottom: 5px; }
+        .compare-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0052ff; color: white; padding: 15px; display: none; justify-content: space-between; align-items: center; z-index: 1600; }
     </style>
 </head>
 <body data-theme="light">
@@ -72,17 +76,22 @@
 
 <div class="cart-float" id="cartFloat" onclick="openCartModal()">
     <i class="fas fa-shopping-cart"></i>
-    <div class="cart-count" id="cartCount" style="position:absolute; top:0; right:0; background:red; border-radius:50%; width:22px; height:22px; font-size:12px; display:flex; justify-content:center; align-items:center;">0</div>
+    <div id="cartCount" style="position:absolute; top:0; right:0; background:red; border-radius:50%; width:20px; height:20px; font-size:11px; display:flex; justify-content:center; align-items:center;">0</div>
+</div>
+
+<div class="compare-bar" id="compareBar">
+    <span id="compareText">2 productos seleccionados</span>
+    <button onclick="startComparison()" style="background:white; color:#0052ff; border:none; padding:8px 15px; border-radius:8px; font-weight:bold;">COMPARAR</button>
 </div>
 
 <div class="controls">
-    <input type="text" class="search-box" id="searchInput" placeholder="Buscar equipo..." oninput="load()">
+    <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre o RAM..." oninput="load()">
     <button onclick="toggleDarkMode()" style="width:45px; height:45px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main);"><i class="fas fa-moon"></i></button>
 </div>
 
 <div class="sidebar">
     <div class="category active" onclick="filterBrand('Todos', this)"><i class="fas fa-th-large"></i> Todos</div>
-    <div class="category" id="cat-fav" onclick="filterBrand('Favoritos', this)"><i class="fas fa-heart"></i> Favoritos</div>
+    <div class="category" onclick="filterBrand('Favoritos', this)"><i class="fas fa-heart"></i> Mis Favoritos</div>
     <div class="category" onclick="filterBrand('Samsung', this)">Samsung</div>
     <div class="category" onclick="filterBrand('Honor', this)">Honor</div>
     <div class="category" onclick="filterBrand('Xiaomi', this)">Xiaomi</div>
@@ -92,7 +101,7 @@
 </div>
 
 <div class="main">
-    <div style="margin-bottom: 15px; opacity: 0.7;">Disponibles: <b id="items-count">0</b></div>
+    <div style="margin-bottom: 15px; opacity: 0.8; font-size: 14px;">Catálogo 2026 | <span id="items-count">0</span> productos</div>
     <div class="grid" id="grid"></div>
 </div>
 
@@ -101,18 +110,18 @@
 </div>
 
 <script>
-// AQUÍ ESTÁN TODOS TUS DATOS ORIGINALES (NO BORRÉ NADA)
+// AQUÍ ESTÁN TUS 55 PRODUCTOS ORIGINALES
 const phones = [
-    {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh", status: "Nuevo"},
+    {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
-    {id:3, name:"Honor X8b 512GB", brand:"Honor", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x8b-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh", status: "Hot"},
+    {id:3, name:"Honor X8b 512GB", brand:"Honor", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x8b-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
     {id:4, name:"Honor X7c 256GB", brand:"Honor", price:1399, img:"https://bf1af2.akinoncloudcdn.com/products/2025/01/30/339636/b0d243b4-0188-4cd4-8cf1-c4323796b401_size3840_cropCenter.jpg", ram:"8GB", cam:"108MP", bat:"5200mAh"},
     {id:5, name:"Honor X6c 256GB", brand:"Honor", price:1170, img:"https://2b.com.eg/media/catalog/product/cache/661473ab953cdcdf4c3b607144109b90/h/o/honor-x6c-_ocean_1.jpg", ram:"6GB", cam:"50MP", bat:"5200mAh"},
     {id:6, name:"Honor X6b 256GB", brand:"Honor", price:1099, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x6b-1.jpg", ram:"6GB", cam:"50MP", bat:"5200mAh"},
     {id:7, name:"Honor X5c 128GB", brand:"Honor", price:799, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x5-1.jpg", ram:"4GB", cam:"13MP", bat:"5100mAh"},
     {id:8, name:"Honor X5c 64GB", brand:"Honor", price:599, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x5-1.jpg", ram:"4GB", cam:"13MP", bat:"5100mAh"},
     {id:9, name:"Honor Pad X8", brand:"Honor", price:1250, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-pad-x8-1.jpg", ram:"4GB", cam:"5MP", bat:"5100mAh"},
-    {id:10, name:"Samsung Galaxy A56 5G", brand:"Samsung", price:2999, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg", ram:"12GB", cam:"50MP", bat:"5000mAh", status: "Nuevo"},
+    {id:10, name:"Samsung Galaxy A56 5G", brand:"Samsung", price:2999, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg", ram:"12GB", cam:"50MP", bat:"5000mAh"},
     {id:11, name:"Samsung Galaxy A36 5G", brand:"Samsung", price:2499, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a35-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
     {id:12, name:"Samsung Galaxy A26 5G", brand:"Samsung", price:1799, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a25-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
     {id:13, name:"Samsung Galaxy A17 5G", brand:"Samsung", price:1699, img:"https://media.bechtle.com/is/180712/1c4b3d4ee288fc9434f5175bf56070570/c3/-/2379e145ecc84d958ceda59b227af829", ram:"8GB", cam:"50MP", bat:"5000mAh"},
@@ -123,7 +132,7 @@ const phones = [
     {id:18, name:"Samsung A05 64GB", brand:"Samsung", price:720, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a05-1.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
     {id:19, name:"Samsung Tab A9", brand:"Samsung", price:1450, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-tab-a9-1.jpg", ram:"4GB", cam:"8MP", bat:"5100mAh"},
     {id:20, name:"Samsung Tab S9 FE", brand:"Samsung", price:3100, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-tab-s9-fe-1.jpg", ram:"6GB", cam:"8MP", bat:"8000mAh"},
-    {id:21, name:"Samsung Galaxy S24 Ultra", brand:"Samsung", price:8900, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg", ram:"12GB", cam:"200MP", bat:"5000mAh", status: "Hot"},
+    {id:21, name:"Samsung Galaxy S24 Ultra", brand:"Samsung", price:8900, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg", ram:"12GB", cam:"200MP", bat:"5000mAh"},
     {id:22, name:"Motorola G85 256GB", brand:"Motorola", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-moto-g85-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
     {id:23, name:"Motorola G56 256GB", brand:"Motorola", price:1699, img:"https://tse2.mm.bing.net/th/id/OIP.jsPhAbO-iHgRkLrtXBUWSAHaF7", ram:"8GB", cam:"50MP", bat:"5000mAh"},
     {id:24, name:"Motorola G35 5G", brand:"Motorola", price:1199, img:"https://tse2.mm.bing.net/th/id/OIP.KW_RgBrNgDI6W99aw-YCPQHaHa", ram:"4GB", cam:"50MP", bat:"5000mAh"},
@@ -141,7 +150,7 @@ const phones = [
     {id:36, name:"Poco X6 Pro", brand:"Xiaomi", price:2600, img:"https://tse1.mm.bing.net/th/id/OIP.Yv77gt5r0m8VKIjHYh4n1AHaFZ?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"8GB", cam:"64MP", bat:"5000mAh"},
     {id:37, name:"Poco M6 Pro", brand:"Xiaomi", price:1550, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-poco-m6-pro-1.jpg", ram:"8GB", cam:"64MP", bat:"5000mAh"},
     {id:38, name:"Redmi Note 13 4G", brand:"Xiaomi", price:1350, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-4g-1.jpg", ram:"8GB", cam:"108MP", bat:"5000mAh"},
-    {id:39, name:"iPhone 16 Pro Max 256GB", brand:"Apple", price:13800, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-pro-max-1.jpg", ram:"8GB", cam:"48MP", bat:"4676mAh", status: "Nuevo"},
+    {id:39, name:"iPhone 16 Pro Max 256GB", brand:"Apple", price:13800, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-pro-max-1.jpg", ram:"8GB", cam:"48MP", bat:"4676mAh"},
     {id:40, name:"iPhone 16 128GB", brand:"Apple", price:7499, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-1.jpg", ram:"8GB", cam:"48MP", bat:"3561mAh"},
     {id:41, name:"iPhone 15 128GB", brand:"Apple", price:6499, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-15-1.jpg", ram:"6GB", cam:"48MP", bat:"3349mAh"},
     {id:42, name:"iPhone 14 128GB", brand:"Apple", price:5500, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-1.jpg", ram:"6GB", cam:"12MP", bat:"3279mAh"},
@@ -161,9 +170,10 @@ const phones = [
 ];
 
 let currentBrand = "Todos";
-let cartList = [];
+let cart = [];
 let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
-let reviews = JSON.parse(localStorage.getItem('jazz_revs_v1')) || {};
+let reviews = JSON.parse(localStorage.getItem('jazz_revs')) || {};
+let compareList = [];
 
 function load() {
     const grid = document.getElementById("grid");
@@ -172,24 +182,28 @@ function load() {
     const filtered = phones.filter(p => {
         const matchBrand = (currentBrand === "Todos") || 
                            (currentBrand === "Favoritos" ? favorites.includes(p.id) : p.brand === currentBrand);
-        return matchBrand && p.name.toLowerCase().includes(search);
+        const matchSearch = p.name.toLowerCase().includes(search) || p.ram.toLowerCase().includes(search);
+        return matchBrand && matchSearch;
     });
 
-    document.getElementById("items-count").innerText = `${filtered.length} productos`;
+    document.getElementById("items-count").innerText = filtered.length;
     
     grid.innerHTML = filtered.map(p => {
         const isFav = favorites.includes(p.id);
+        const isComparing = compareList.includes(p.id);
         return `
             <div class="card" onclick="showDetail(${p.id})">
                 <i class="fas fa-heart fav-badge ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${p.id})"></i>
                 <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'">
-                <h3 style="font-size:13px;">${p.name}</h3>
+                <h3 style="font-size:13px; margin:10px 0;">${p.name}</h3>
                 <div class="price">Q${p.price.toLocaleString()}</div>
-                <button style="background:var(--accent); color:white; border:none; padding:8px; border-radius:8px; font-size:11px;">VER DETALLES</button>
+                <div style="display:flex; gap:5px; margin-top:auto;">
+                    <button onclick="addToCart(event, ${p.id})" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:8px; font-size:10px;"><i class="fas fa-plus"></i> CARRITO</button>
+                    <button onclick="toggleCompare(event, ${p.id})" style="background:${isComparing ? '#ffc107':'#eee'}; border:none; padding:8px; border-radius:8px;"><i class="fas fa-columns"></i></button>
+                </div>
             </div>
         `;
     }).join('');
-    updateCartUI();
 }
 
 function filterBrand(brand, el) {
@@ -201,42 +215,97 @@ function filterBrand(brand, el) {
 
 function toggleFavorite(e, id) {
     e.stopPropagation();
-    if(favorites.includes(id)) { favorites = favorites.filter(f => f !== id); }
-    else { favorites.push(id); }
+    if(favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+    else favorites.push(id);
     localStorage.setItem('jazz_favs', JSON.stringify(favorites));
     load();
 }
 
-function toggleDarkMode() {
-    const current = document.body.getAttribute('data-theme');
-    document.body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+function addToCart(e, id) {
+    e.stopPropagation();
+    cart.push(phones.find(p => p.id === id));
+    document.getElementById("cartCount").innerText = cart.length;
+}
+
+function toggleCompare(e, id) {
+    e.stopPropagation();
+    if(compareList.includes(id)) compareList = compareList.filter(i => i !== id);
+    else if(compareList.length < 2) compareList.push(id);
+    
+    const bar = document.getElementById("compareBar");
+    bar.style.display = compareList.length > 0 ? "flex" : "none";
+    document.getElementById("compareText").innerText = `${compareList.length} para comparar`;
+    load();
+}
+
+function startComparison() {
+    if(compareList.length < 2) return alert("Elige 2 equipos");
+    const p1 = phones.find(x => x.id === compareList[0]);
+    const p2 = phones.find(x => x.id === compareList[1]);
+    
+    document.getElementById("modalContent").innerHTML = `
+        <h3>Comparativa</h3>
+        <table style="width:100%; border-collapse:collapse; text-align:center;">
+            <tr><td></td><td><img src="${p1.img}" width="80"></td><td><img src="${p2.img}" width="80"></td></tr>
+            <tr style="border-bottom:1px solid #eee"><td><b>Modelo</b></td><td>${p1.name}</td><td>${p2.name}</td></tr>
+            <tr style="border-bottom:1px solid #eee"><td><b>RAM</b></td><td>${p1.ram}</td><td>${p2.ram}</td></tr>
+            <tr style="border-bottom:1px solid #eee"><td><b>Cámara</b></td><td>${p1.cam}</td><td>${p2.cam}</td></tr>
+            <tr style="border-bottom:1px solid #eee"><td><b>Batería</b></td><td>${p1.bat}</td><td>${p2.bat}</td></tr>
+            <tr><td><b>Precio</b></td><td style="color:blue">Q${p1.price}</td><td style="color:blue">Q${p2.price}</td></tr>
+        </table>
+        <button onclick="compareList=[]; load(); closeModal();" style="width:100%; margin-top:20px; padding:10px;">Cerrar y Limpiar</button>
+    `;
+    document.getElementById("modal").style.display = "flex";
 }
 
 function showDetail(id) {
     const p = phones.find(x => x.id === id);
-    const inCart = cartList.includes(id);
+    const pReviews = reviews[id] || [];
+    
     document.getElementById("modalContent").innerHTML = `
         <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-        <div style="text-align:center">
-            <img src="${p.img}" style="width:100%; height:200px; object-fit:contain;">
-            <h2>${p.name}</h2>
-            <div class="price" style="font-size:24px;">Q${p.price.toLocaleString()}</div>
-        </div>
+        <img src="${p.img}" style="width:100%; height:200px; object-fit:contain;">
+        <h2>${p.name}</h2>
+        <div class="price" style="font-size:24px;">Q${p.price.toLocaleString()}</div>
         <div class="spec-icon-grid">
             <div class="spec-item"><i class="fas fa-microchip"></i> RAM: ${p.ram}</div>
             <div class="spec-item"><i class="fas fa-camera"></i> Cam: ${p.cam}</div>
             <div class="spec-item"><i class="fas fa-battery-full"></i> Bat: ${p.bat}</div>
             <div class="spec-item"><i class="fas fa-tag"></i> ${p.brand}</div>
         </div>
-        <a href="https://wa.me/50200000000?text=Me interesa el ${p.name}" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+        
+        <div class="review-section">
+            <h4>Reseñas de clientes</h4>
+            <div id="reviewList">${pReviews.map(r => `<p>⭐ ${r}</p>`).join('') || 'Sin reseñas aún'}</div>
+            <div style="margin-top:10px;">
+                <input type="text" id="revInp" placeholder="Escribe tu opinión..." style="width:70%; padding:8px; border-radius:8px; border:1px solid #ccc;">
+                <button onclick="addReview(${id})" style="padding:8px 12px; background:var(--accent); color:white; border:none; border-radius:8px;">Enviar</button>
+            </div>
+        </div>
+
+        <a href="https://wa.me/50200000000?text=Hola Jazzcel, me interesa el ${p.name}" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Comprar ahora
         </a>
     `;
     document.getElementById("modal").style.display = "flex";
 }
 
+function addReview(id) {
+    const val = document.getElementById("revInp").value;
+    if(!val) return;
+    if(!reviews[id]) reviews[id] = [];
+    reviews[id].push(val);
+    localStorage.setItem('jazz_revs', JSON.stringify(reviews));
+    showDetail(id);
+}
+
+function toggleDarkMode() {
+    const b = document.body;
+    b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+}
+
 function closeModal() { document.getElementById("modal").style.display = "none"; }
-function updateCartUI() { document.getElementById("cartCount").innerText = cartList.length; }
+function openCartModal() { alert("Carrito: " + cart.length + " productos seleccionados."); }
 
 load();
 </script>

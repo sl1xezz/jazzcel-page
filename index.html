@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAZZCEL | Catálogo Maestro 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #f4f7fb; --bg-sidebar: #001a57; --bg-card: #ffffff;
+            --bg-specs: #f8f9fa; --text-main: #333333; --accent: #0052ff; 
+            --stars: #ffc107; --border: #e0e0e0; --success: #25D366;
+            --heart: #ff4757;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b0e14; --bg-sidebar: #05070a; --bg-card: #1e222d;
+            --bg-specs: #2d333b; --text-main: #ffffff; --border: #30363d;
+        }
+
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        .banner { position: fixed; top: 15px; left: 15px; right: 15px; background: #001a57; color: white; padding: 15px 0; text-align: center; font-size: 26px; font-weight: 900; letter-spacing: 5px; z-index: 1100; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--bg-sidebar); margin: 100px 0 15px 15px; border-radius: 20px; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; overflow-y: auto; }
+        .category { padding: 12px 15px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); font-size: 14px; }
+        .category:hover, .category.active { background: white; color: #001a57; }
+        
+        .cat-fav { border: 1px dashed var(--heart); color: #ff7979; margin-bottom: 5px; }
+        .cat-fav.active { background: var(--heart) !important; color: white !important; }
+
+        /* Filtro Desplegable */
+        .price-filter-wrapper { margin-top: 15px; position: relative; }
+        .dropdown-btn {
+            width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
+            color: white; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-size: 13px; transition: 0.3s;
+        }
+        .dropdown-btn:hover { background: rgba(255, 255, 255, 0.2); }
+        
+        .dropdown-content {
+            display: none; position: absolute; bottom: 50px; left: 0; width: 100%;
+            background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 1200; overflow: hidden; animation: slideUp 0.3s ease;
+        }
+        .dropdown-content.show { display: block; }
+        .dropdown-item { padding: 12px 15px; color: #333; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: 0.2s; }
+        .dropdown-item:hover { background: #f4f7fb; color: var(--accent); }
+        .dropdown-item.active { background: var(--accent); color: white; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Main e Interfaz */
+        .main { flex: 1; padding: 160px 40px 40px; overflow-y: auto; scroll-behavior: smooth; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        
+        .card { 
+            background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; 
+            transition: 0.3s; border: 1px solid var(--border); cursor: pointer; 
+            display: flex; flex-direction: column; justify-content: space-between; 
+            height: 320px; position: relative; animation: fadeIn 0.5s ease forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 10px; }
+        .stars-container { color: var(--stars); font-size: 13px; margin-bottom: 5px; letter-spacing: 1px; }
+
+        .fav-badge { position: absolute; top: 15px; right: 15px; font-size: 18px; color: #ccc; transition: 0.3s; z-index: 5; }
+        .fav-badge.active { color: var(--heart); transform: scale(1.2); }
+
+        .status-badge { position: absolute; top: 15px; left: 15px; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; color: white; text-transform: uppercase; z-index: 5; }
+        .status-new { background: var(--accent); }
+        .status-hot { background: orange; }
+
+        .recent-section { margin-top: 50px; border-top: 2px solid var(--border); padding-top: 25px; margin-bottom: 20px; }
+        .recent-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .recent-flex { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
+        .recent-mini-card { min-width: 130px; background: var(--bg-card); padding: 10px; border-radius: 15px; border: 1px solid var(--border); text-align: center; font-size: 11px; cursor: pointer; transition: 0.3s; }
+        .recent-mini-card img { width: 70px; height: 70px; object-fit: contain; }
+
+        .price { font-size: 18px; font-weight: 800; color: var(--accent); margin: 5px 0; }
+        
+        .action-btns { display: flex; gap: 5px; }
+        .btn-compare { background: var(--bg-specs); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); font-size: 11px; cursor: pointer; flex: 1; }
+        .btn-compare.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-cart-add { background: var(--bg-specs); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); font-size: 11px; cursor: pointer; flex: 1; }
+        .btn-cart-add.active { background: var(--success); color: white; border-color: var(--success); }
+
+        .controls { position: fixed; top: 105px; right: 40px; z-index: 950; display: flex; gap: 10px; }
+        .search-box { padding: 12px 20px; border-radius: 25px; border: 1px solid var(--border); width: 250px; background: var(--bg-card); color: var(--text-main); outline: none; }
+
+        .cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--success); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 1500; transition: 0.3s; }
+        .cart-count { position: absolute; top: 0; right: 0; background: red; color: white; font-size: 12px; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
+        .modal-content { background: var(--bg-card); width: 95%; max-width: 650px; border-radius: 25px; padding: 25px; position: relative; max-height: 85vh; overflow-y: auto; }
+        
+        .spec-icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
+        .spec-item { display: flex; align-items: center; gap: 10px; background: var(--bg-specs); padding: 10px; border-radius: 12px; font-size: 12px; }
+        .spec-item i { color: var(--accent); font-size: 16px; }
+
+        .btn-wa { background: var(--success); color: white; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; margin-top: 10px; }
+        
+        .gallery-main { width: 100%; height: 250px; object-fit: contain; margin-bottom: 20px; }
+
+        /* Estilos Carrito y Comparación */
+        .cart-item-row { display: flex; align-items: center; gap: 15px; padding: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+        .cart-item-row img { width: 50px; height: 50px; object-fit: contain; }
+        .compare-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; color: var(--text-main); }
+        .compare-table th, .compare-table td { padding: 10px; border: 1px solid var(--border); text-align: center; }
+        .compare-table th { background: var(--bg-specs); }
+
+        /* Estilos Reseñas */
+        .reviews-box { margin-top: 25px; border-top: 1px solid var(--border); padding-top: 15px; }
+        .review-item { background: var(--bg-specs); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 12px; text-align: left; }
+        .review-stars { color: var(--stars); font-size: 10px; margin-bottom: 4px; }
+        .review-input-group { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+        .review-input-group input { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); }
+        .btn-review { background: var(--accent); color: white; border: none; padding: 8px; border-radius: 8px; cursor: pointer; }
+
+    </style>
+</head>
+<body data-theme="light">
+
+<div class="banner">JAZZCEL</div>
+
+<div class="cart-float" id="cartFloat" onclick="openCartModal()">
+    <i class="fas fa-shopping-cart"></i>
+    <div class="cart-count" id="cartCount">0</div>
+</div>
+
+<div class="controls">
+    <input type="text" class="search-box" id="searchInput" placeholder="Busca equipo o memoria (ej. 256GB)" oninput="load()">
+    <button onclick="toggleDarkMode()" style="width:45px; height:45px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main);"><i class="fas fa-moon"></i></button>
+</div>
+
+<div class="sidebar">
+    <div class="category active" onclick="filterBrand('Todos', this)"><i class="fas fa-th-large"></i> Todos</div>
+    <div class="category cat-fav" id="cat-fav" onclick="filterBrand('Favoritos', this)"><i class="fas fa-heart"></i> Mis Favoritos</div>
+    <div class="category" onclick="filterBrand('Samsung', this)"><i class="fas fa-mobile-alt"></i> Samsung</div>
+    <div class="category" onclick="filterBrand('Honor', this)"><i class="fas fa-medal"></i> Honor</div>
+    <div class="category" onclick="filterBrand('Xiaomi', this)"><i class="fas fa-bolt"></i> Xiaomi</div>
+    <div class="category" onclick="filterBrand('Motorola', this)"><i class="fas fa-m"></i> Motorola</div>
+    <div class="category" onclick="filterBrand('Apple', this)"><i class="fab fa-apple"></i> Apple</div>
+    <div class="category" onclick="filterBrand('Básicos', this)"><i class="fas fa-keyboard"></i> Básicos</div>
+    <div class="category" onclick="filterBrand('Accesorios', this)"><i class="fas fa-headphones"></i> Accesorios</div>
+    <div class="category" onclick="filterBrand('Repuestos', this)"><i class="fas fa-tools"></i> Repuestos</div>
+
+    <div class="price-filter-wrapper">
+        <button class="dropdown-btn" onclick="toggleDropdown()">
+            <span id="priceLabel">Filtrar por Precio</span>
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        <div class="dropdown-content" id="priceDropdown">
+            <div class="dropdown-item active" onclick="setPriceRange(15000, 'Cualquier precio', this)">Todos</div>
+            <div class="dropdown-item" onclick="setPriceRange(500, 'Bajo Q500', this)">Bajo Q500</div>
+            <div class="dropdown-item" onclick="setPriceRange(1500, 'Bajo Q1,500', this)">Bajo Q1,500</div>
+            <div class="dropdown-item" onclick="setPriceRange(3000, 'Bajo Q3,000', this)">Bajo Q3,000</div>
+            <div class="dropdown-item" onclick="setPriceRange(6000, 'Bajo Q6,000', this)">Bajo Q6,000</div>
+            <div class="dropdown-item" onclick="setPriceRange(10000, 'Premium', this)">Premium</div>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+    <div style="margin-bottom: 15px; opacity: 0.7;">Disponibles: <b id="items-count">0</b></div>
+    <div class="grid" id="grid"></div>
+
+    <div class="recent-section" id="recentSection" style="display:none;">
+        <div class="recent-title"><i class="fas fa-history" style="color:var(--accent)"></i> Vistos recientemente</div>
+        <div class="recent-flex" id="recentFlex"></div>
+    </div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target == this) closeModal()">
+    <div class="modal-content" id="modalContent"></div>
+</div>
+
+<script>
+// (Aquí se mantienen tus datos de 'phones' intactos...)
+const phones = [
+    {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh", status: "Nuevo"},
+    {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
+    {id:3, name:"Honor X8b 512GB", brand:"Honor", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x8b-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh", status: "Hot"},
+    {id:4, name:"Honor X7c 256GB", brand:"Honor", price:1399, img:"https://bf1af2.akinoncloudcdn.com/products/2025/01/30/339636/b0d243b4-0188-4cd4-8cf1-c4323796b401_size3840_cropCenter.jpg", ram:"8GB", cam:"108MP", bat:"5200mAh"},
+    {id:5, name:"Honor X6c 256GB", brand:"Honor", price:1170, img:"https://2b.com.eg/media/catalog/product/cache/661473ab953cdcdf4c3b607144109b90/h/o/honor-x6c-_ocean_1.jpg", ram:"6GB", cam:"50MP", bat:"5200mAh"},
+    {id:6, name:"Honor X6b 256GB", brand:"Honor", price:1099, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x6b-1.jpg", ram:"6GB", cam:"50MP", bat:"5200mAh"},
+    {id:7, name:"Honor X5c 128GB", brand:"Honor", price:799, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x5-1.jpg", ram:"4GB", cam:"13MP", bat:"5100mAh"},
+    {id:8, name:"Honor X5c 64GB", brand:"Honor", price:599, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x5-1.jpg", ram:"4GB", cam:"13MP", bat:"5100mAh"},
+    {id:9, name:"Honor Pad X8", brand:"Honor", price:1250, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-pad-x8-1.jpg", ram:"4GB", cam:"5MP", bat:"5100mAh"},
+    {id:10, name:"Samsung Galaxy A56 5G", brand:"Samsung", price:2999, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg", ram:"12GB", cam:"50MP", bat:"5000mAh", status: "Nuevo"},
+    {id:11, name:"Samsung Galaxy A36 5G", brand:"Samsung", price:2499, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a35-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:12, name:"Samsung Galaxy A26 5G", brand:"Samsung", price:1799, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a25-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:13, name:"Samsung Galaxy A17 5G", brand:"Samsung", price:1699, img:"https://media.bechtle.com/is/180712/1c4b3d4ee288fc9434f5175bf56070570/c3/-/2379e145ecc84d958ceda59b227af829", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:14, name:"Samsung A07 128GB", brand:"Samsung", price:865, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a05-1.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:15, name:"Samsung A06 128GB", brand:"Samsung", price:749, img:"https://tse2.mm.bing.net/th/id/OIP.IScwGxzDAVuOnxibu48CwAHaJs", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:16, name:"Samsung A05s 128GB", brand:"Samsung", price:845, img:"https://www.euronics.it/dw/image/v2/BFPN_PRD/on/demandware.static/-/Sites-catalog_euronics_master/default/dw3e17a67f/hi-res/232013074.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:17, name:"Samsung A05 128GB", brand:"Samsung", price:750, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a05-1.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:18, name:"Samsung A05 64GB", brand:"Samsung", price:720, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a05-1.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:19, name:"Samsung Tab A9", brand:"Samsung", price:1450, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-tab-a9-1.jpg", ram:"4GB", cam:"8MP", bat:"5100mAh"},
+    {id:20, name:"Samsung Tab S9 FE", brand:"Samsung", price:3100, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-tab-s9-fe-1.jpg", ram:"6GB", cam:"8MP", bat:"8000mAh"},
+    {id:21, name:"Samsung Galaxy S24 Ultra", brand:"Samsung", price:8900, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-sm-s928-0.jpg", ram:"12GB", cam:"200MP", bat:"5000mAh", status: "Hot"},
+    {id:22, name:"Motorola G85 256GB", brand:"Motorola", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-moto-g85-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:23, name:"Motorola G56 256GB", brand:"Motorola", price:1699, img:"https://tse2.mm.bing.net/th/id/OIP.jsPhAbO-iHgRkLrtXBUWSAHaF7", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:24, name:"Motorola G35 5G", brand:"Motorola", price:1199, img:"https://tse2.mm.bing.net/th/id/OIP.KW_RgBrNgDI6W99aw-YCPQHaHa", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:25, name:"Motorola G05 128GB", brand:"Motorola", price:799, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-moto-g04-1.jpg", ram:"4GB", cam:"16MP", bat:"5000mAh"},
+    {id:26, name:"Motorola G15 64GB", brand:"Motorola", price:999, img:"https://cdn.kalvo.com/uploads/img/gallery/67625-motorola-moto-g15-3.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:27, name:"Motorola E13 64GB", brand:"Motorola", price:599, img:"https://tse4.mm.bing.net/th/id/OIP.PxAAvFCsppr6X_W1H9-EzwHaHa", ram:"2GB", cam:"13MP", bat:"5000mAh"},
+    {id:28, name:"Motorola Edge 50 Fusion", brand:"Motorola", price:2800, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-edge-50-fusion-1.jpg", ram:"8GB", cam:"50MP", bat:"5000mAh"},
+    {id:29, name:"Motorola Razr 50", brand:"Motorola", price:5500, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-razr-50-1.jpg", ram:"8GB", cam:"50MP", bat:"4200mAh"},
+    {id:30, name:"Motorola G24 Power", brand:"Motorola", price:1050, img:"https://fdn2.gsmarena.com/vv/pics/motorola/motorola-moto-g24-power-1.jpg", ram:"8GB", cam:"50MP", bat:"6000mAh"},
+    {id:31, name:"Redmi Note 14 Pro 5G", brand:"Xiaomi", price:1799, img:"https://tse2.mm.bing.net/th/id/OIP.EEwB9swE7Md9OFVkynAoawHaHa", ram:"8GB", cam:"200MP", bat:"5000mAh"},
+    {id:32, name:"Redmi 13 256GB", brand:"Xiaomi", price:1199, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-13-1.jpg", ram:"8GB", cam:"108MP", bat:"5030mAh"},
+    {id:33, name:"Redmi 14C 128GB", brand:"Xiaomi", price:799, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-14c-1.jpg", ram:"4GB", cam:"50MP", bat:"5000mAh"},
+    {id:34, name:"Redmi A3 128GB", brand:"Xiaomi", price:699, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-a3-1.jpg", ram:"4GB", cam:"8MP", bat:"5000mAh"},
+    {id:35, name:"Xiaomi 14T Pro", brand:"Xiaomi", price:4999, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-14t-pro-1.jpg", ram:"12GB", cam:"50MP", bat:"5000mAh"},
+    {id:36, name:"Poco X6 Pro", brand:"Xiaomi", price:2600, img:"https://tse1.mm.bing.net/th/id/OIP.Yv77gt5r0m8VKIjHYh4n1AHaFZ?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"8GB", cam:"64MP", bat:"5000mAh"},
+    {id:37, name:"Poco M6 Pro", brand:"Xiaomi", price:1550, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-poco-m6-pro-1.jpg", ram:"8GB", cam:"64MP", bat:"5000mAh"},
+    {id:38, name:"Redmi Note 13 4G", brand:"Xiaomi", price:1350, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi/xiaomi-redmi-note-13-4g-1.jpg", ram:"8GB", cam:"108MP", bat:"5000mAh"},
+    {id:39, name:"iPhone 16 Pro Max 256GB", brand:"Apple", price:13800, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-pro-max-1.jpg", ram:"8GB", cam:"48MP", bat:"4676mAh", status: "Nuevo"},
+    {id:40, name:"iPhone 16 128GB", brand:"Apple", price:7499, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-16-1.jpg", ram:"8GB", cam:"48MP", bat:"3561mAh"},
+    {id:41, name:"iPhone 15 128GB", brand:"Apple", price:6499, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-15-1.jpg", ram:"6GB", cam:"48MP", bat:"3349mAh"},
+    {id:42, name:"iPhone 14 128GB", brand:"Apple", price:5500, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-1.jpg", ram:"6GB", cam:"12MP", bat:"3279mAh"},
+    {id:43, name:"iPhone 13 128GB", brand:"Apple", price:4800, img:"https://m.media-amazon.com/images/I/61BUt5ZErdL._AC_SL1500_.jpg", ram:"4GB", cam:"12MP", bat:"3240mAh"},
+    {id:44, name:"iPhone 11 64GB", brand:"Apple", price:2650, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-11-1.jpg", ram:"4GB", cam:"12MP", bat:"3110mAh"},
+    {id:45, name:"Alcatel 1021", brand:"Básicos", price:99, img:"https://www.alcatelmobile.com/wp-content/uploads/2025/08/C3E_Alcatel-1021_Midnight-Blue_Special-Front-Back.png", ram:"N/A", cam:"N/A", bat:"800mAh"},
+    {id:46, name:"Logic A5", brand:"Básicos", price:99, img:"https://tse1.mm.bing.net/th/id/OIP.YfAfeS6CLjuCJxXpMEA5eQHaJh", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:47, name:"Logic Z3", brand:"Básicos", price:125, img:"https://www.logicmobility.com/wp-content/uploads/2024/09/Z1L_4g_lte_--768x751.png", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:48, name:"Logic F11", brand:"Básicos", price:189, img:"https://tse2.mm.bing.net/th/id/OIP.yKIU9zhJVgr4zy9IvvVqdgHaHa", ram:"N/A", cam:"VGA", bat:"1000mAh"},
+    {id:49, name:"BLU Z4", brand:"Básicos", price:99, img:"https://www.moviles.com/fotos/blu-z4-3-80008-g.jpg", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:50, name:"Maxwest Neo 8", brand:"Básicos", price:125, img:"https://tse4.mm.bing.net/th/id/OIP.ewScK7v7whlcA6CeK0MDTgHaH3", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:51, name:"Azumi L4G", brand:"Básicos", price:89, img:"https://www.lapolar.cl/dw/image/v2/BCPP_PRD/on/demandware.static/-/Sites-master-catalog/default/dw9e49ce7c/images/large/1CC23422328.jpg", ram:"Básica", cam:"VGA", bat:"1000mAh"},
+    {id:52, name:"SKY F3G", brand:"Básicos", price:89, img:"https://tse2.mm.bing.net/th/id/OIP.uZiDp5Mnbd3Phzdstk4VugAAAA", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:53, name:"PCD PG03", brand:"Básicos", price:99, img:"https://pcdlatam.com/wp-content/uploads/2022/02/PG03-2021.png", ram:"32MB", cam:"VGA", bat:"800mAh"},
+    {id:54, name:"Nokia 105", brand:"Básicos", price:199, img:"https://tse3.mm.bing.net/th/id/OIP.VJ3vdkIxM5ngvwNKzJ9XfgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"4MB", cam:"N/A", bat:"800mAh"},
+    {id:55, name:"BLU Tank II", brand:"Básicos", price:175, img:"https://tse2.mm.bing.net/th/id/OIP.9bC1PvPQ_yQ4qizcSd19-wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"32MB", cam:"VGA", bat:"1900mAh"},
+    {id:101, name:"Audífonos Bluetooth JBL", brand:"Accesorios", price:350, img:"https://m.media-amazon.com/images/I/516O27mYpLL._AC_SL1200_.jpg", ram:"Sonido Pro", cam:"Micro HD", bat:"20 Horas"},
+    {id:102, name:"Reloj Inteligente Ultra", brand:"Accesorios", price:450, img:"https://m.media-amazon.com/images/I/61S9A-pIdDL._AC_SL1500_.jpg", ram:"Fitness", cam:"Notific.", bat:"7 días"},
+    {id:103, name:"Cargador Tipo C 25W", brand:"Accesorios", price:125, img:"https://m.media-amazon.com/images/I/41m9-Yk-T9L._AC_SL1000_.jpg", ram:"Carga Rápida", cam:"Universal", bat:"N/A"},
+    {id:201, name:"Pantalla Original Samsung A54", brand:"Repuestos", price:950, img:"https://m.media-amazon.com/images/I/61G6X6uM1tL._AC_SL1000_.jpg", ram:"Original", cam:"120Hz", bat:"Nueva"},
+    {id:202, name:"Batería iPhone 13", brand:"Repuestos", price:375, img:"https://m.media-amazon.com/images/I/51Y0yBvV6YL._AC_SL1000_.jpg", ram:"Original", cam:"Ion-Litio", bat:"Nueva"}
+];
+
+let currentBrand = "Todos";
+let maxPrice = 15000;
+let cartList = [];
+let compareList = [];
+let reviews = JSON.parse(localStorage.getItem('jazz_revs_v1')) || {};
+let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
+let recentlyViewed = JSON.parse(localStorage.getItem('jazz_recent')) || [];
+
+function toggleDarkMode() {
+    const body = document.body;
+    const current = body.getAttribute('data-theme');
+    body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+}
+
+function load() {
+    const grid = document.getElementById("grid");
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    
+    const filtered = phones.filter(p => {
+        const matchBrand = (currentBrand === "Todos") || 
+                           (currentBrand === "Favoritos" ? favorites.includes(p.id) : p.brand === currentBrand);
+        return matchBrand && (p.price <= maxPrice) && (p.name.toLowerCase().includes(search));
+    });
+
+    document.getElementById("items-count").innerText = `${filtered.length} productos`;
+    
+    grid.innerHTML = filtered.map(p => {
+        const isFav = favorites.includes(p.id);
+        const inCart = cartList.includes(p.id);
+        const inCompare = compareList.includes(p.id);
+        const pRev = reviews[p.id] || [];
+        const avg = pRev.length ? Math.round(pRev.reduce((a,b)=>a+b.stars,0)/pRev.length) : 5;
+
+        return `
+            <div class="card" onclick="showDetail(${p.id})">
+                ${p.status ? `<div class="status-badge ${p.status === 'Nuevo' ? 'status-new' : 'status-hot'}">${p.status}</div>` : ''}
+                <i class="fas fa-heart fav-badge ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${p.id})"></i>
+                <div>
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150?text=Jazzcel'">
+                    <div class="stars-container">${'★'.repeat(avg)}${'☆'.repeat(5-avg)}</div>
+                    <h3 style="font-size:13px; margin:5px 0;">${p.name}</h3>
+                </div>
+                <div>
+                    <div class="price">Q${p.price.toLocaleString()}</div>
+                    <div class="action-btns">
+                        <button class="btn-compare ${inCompare ? 'active' : ''}" onclick="toggleCompare(event, ${p.id})">
+                            <i class="fas fa-columns"></i>
+                        </button>
+                        <button class="btn-cart-add ${inCart ? 'active' : ''}" onclick="toggleCart(event, ${p.id})">
+                           <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    updateRecentUI();
+    updateCartUI();
+}
+
+function filterBrand(brand, el) {
+    currentBrand = brand;
+    document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    load();
+}
+
+function toggleDropdown() {
+    document.getElementById("priceDropdown").classList.toggle("show");
+}
+
+function setPriceRange(max, label, el) {
+    maxPrice = max;
+    document.getElementById("priceLabel").innerText = label;
+    document.querySelectorAll('.dropdown-item').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+    toggleDropdown();
+    load();
+}
+
+function toggleFavorite(e, id) {
+    e.stopPropagation();
+    if(favorites.includes(id)) {
+        favorites = favorites.filter(fav => fav !== id);
+    } else {
+        favorites.push(id);
+    }
+    localStorage.setItem('jazz_favs', JSON.stringify(favorites));
+    load();
+}
+
+function toggleCart(e, id) {
+    if(e) e.stopPropagation();
+    if(cartList.includes(id)) {
+        cartList = cartList.filter(item => item !== id);
+    } else {
+        cartList.push(id);
+    }
+    updateCartUI();
+    load();
+}
+
+function updateCartUI() {
+    document.getElementById("cartCount").innerText = cartList.length;
+}
+
+function showDetail(id) {
+    const p = phones.find(x => x.id === id);
+    addToRecent(id);
+    const inCart = cartList.includes(id);
+    const pRev = reviews[id] || [];
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px; color:var(--text-main);">&times;</span>
+        <div style="text-align:center">
+            <img src="${p.img}" class="gallery-main" onerror="this.src='https://via.placeholder.com/150?text=Jazzcel'">
+            <h2 style="margin:0 0 5px 0;">${p.name}</h2>
+            <div class="price" style="font-size:24px;">Q${p.price.toLocaleString()}</div>
+        </div>
+
+        <div class="spec-icon-grid">
+            <div class="spec-item"><i class="fas fa-microchip"></i> <span>RAM: ${p.ram}</span></div>
+            <div class="spec-item"><i class="fas fa-camera"></i> <span>Cam: ${p.cam}</span></div>
+            <div class="spec-item"><i class="fas fa-battery-full"></i> <span>Bat: ${p.bat}</span></div>
+            <div class="spec-item"><i class="fas fa-mobile-alt"></i> <span>Marca: ${p.brand}</span></div>
+        </div>
+        
+        <button onclick="toggleCart(null, ${p.id}); showDetail(${p.id});" class="btn-wa" style="background:${inCart ? '#ff4757' : 'var(--accent)'};">
+            <i class="fas ${inCart ? 'fa-minus-circle' : 'fa-cart-plus'}"></i> ${inCart ? 'Quitar del Pedido' : 'Agregar al Pedido'}
+        </button>
+
+        <a href="https://wa.me/50200000000?text=Hola Jazzcel, me interesa el ${p.name}" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Consultar Disponibilidad
+        </a>
+
+        <div class="reviews-box">
+            <h4 style="margin:0 0 10px 0;">Reseñas de Clientes</h4>
+            <div id="reviewsList">
+                ${pRev.length ? pRev.map(r => `
+                    <div class="review-item">
+                        <div class="review-stars">${'★'.repeat(r.stars)}</div>
+                        <div style="font-weight:bold;">${r.user}</div>
+                        <div>${r.text}</div>
+                    </div>
+                `).join('') : '<p style="font-size:12px; opacity:0.6;">Aún no hay reseñas. ¡Sé el primero!</p>'}
+            </div>
+            
+            <div class="review-input-group">
+                <input type="text" id="revUser" placeholder="Tu nombre">
+                <input type="text" id="revText" placeholder="Escribe tu opinión">
+                <select id="revStars" style="padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-main);">
+                    <option value="5">5 Estrellas</option>
+                    <option value="4">4 Estrellas</option>
+                    <option value="3">3 Estrellas</option>
+                    <option value="2">2 Estrellas</option>
+                    <option value="1">1 Estrella</option>
+                </select>
+                <button class="btn-review" onclick="addReview(${id})">Publicar Reseña</button>
+            </div>
+        </div>
+    `;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function addReview(id) {
+    const user = document.getElementById("revUser").value;
+    const text = document.getElementById("revText").value;
+    const stars = parseInt(document.getElementById("revStars").value);
+
+    if(!user || !text) return alert("Por favor llena todos los campos");
+
+    if(!reviews[id]) reviews[id] = [];
+    reviews[id].push({user, text, stars});
+    localStorage.setItem('jazz_revs_v1', JSON.stringify(reviews));
+    showDetail(id);
+    load();
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function addToRecent(id) {
+    recentlyViewed = recentlyViewed.filter(i => i !== id);
+    recentlyViewed.unshift(id);
+    if(recentlyViewed.length > 8) recentlyViewed.pop();
+    localStorage.setItem('jazz_recent', JSON.stringify(recentlyViewed));
+}
+
+function updateRecentUI() {
+    const section = document.getElementById("recentSection");
+    const flex = document.getElementById("recentFlex");
+    if(recentlyViewed.length === 0) {
+        section.style.display = "none";
+        return;
+    }
+    section.style.display = "block";
+    flex.innerHTML = recentlyViewed.map(id => {
+        const p = phones.find(x => x.id === id);
+        return `
+            <div class="recent-mini-card" onclick="showDetail(${p.id})">
+                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/100'">
+                <div style="font-weight:bold; margin-top:5px;">${p.name}</div>
+                <div style="color:var(--accent)">Q${p.price}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function toggleCompare(e, id) {
+    e.stopPropagation();
+    if(compareList.includes(id)) {
+        compareList = compareList.filter(i => i !== id);
+    } else {
+        if(compareList.length >= 3) return alert("Solo puedes comparar 3 equipos a la vez");
+        compareList.push(id);
+        if(compareList.length >= 2) openCompareModal();
+    }
+    load();
+}
+
+function openCompareModal() {
+    const items = compareList.map(id => phones.find(x => x.id === id));
+    const tableHeader = items.map(p => `<th>${p.name} <i class="fas fa-times" onclick="removeCompare(${p.id})" style="cursor:pointer; color:red; margin-left:5px"></i></th>`).join('');
+    const tableImg = items.map(p => `<td><img src="${p.img}" style="width:60px"></td>`).join('');
+    const tablePrice = items.map(p => `<td>Q${p.price}</td>`).join('');
+    const tableRam = items.map(p => `<td>${p.ram}</td>`).join('');
+    const tableCam = items.map(p => `<td>${p.cam}</td>`).join('');
+    const tableBat = items.map(p => `<td>${p.bat}</td>`).join('');
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px; color:var(--text-main);">&times;</span>
+        <h2>Comparativa de Equipos</h2>
+        <table class="compare-table">
+            <thead><tr><th>Característica</th>${tableHeader}</tr></thead>
+            <tbody>
+                <tr><td>Foto</td>${tableImg}</tr>
+                <tr><td>Precio</td>${tablePrice}</tr>
+                <tr><td>RAM</td>${tableRam}</tr>
+                <tr><td>Cámara</td>${tableCam}</tr>
+                <tr><td>Batería</td>${tableBat}</tr>
+            </tbody>
+        </table>
+        <button onclick="compareList=[]; closeModal(); load();" class="btn-wa" style="background:#666; margin-top:15px;">Limpiar Comparación</button>
+    `;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function removeCompare(id) {
+    compareList = compareList.filter(i => i !== id);
+    if(compareList.length < 2) {
+        closeModal();
+    } else {
+        openCompareModal();
+    }
+    load();
+}
+
+function openCartModal() {
+    if (cartList.length === 0) return alert("Tu carrito está vacío");
+    let total = 0;
+    const cartHtml = cartList.map(id => {
+        const p = phones.find(x => x.id === id);
+        total += p.price;
+        return `<div class="cart-item-row">
+            <img src="${p.img}">
+            <div style="flex:1">
+                <div style="font-weight:bold; font-size:14px; color:var(--text-main);">${p.name}</div>
+                <div style="color:var(--accent); font-weight:800;">Q${p.price.toLocaleString()}</div>
+            </div>
+            <i class="fas fa-trash" style="color:#ff4757; cursor:pointer;" onclick="toggleCart(null, ${p.id}); openCartModal()"></i>
+        </div>`;
+    }).join('');
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px; color:var(--text-main);">&times;</span>
+        <h2 style="color:var(--text-main);"><i class="fas fa-shopping-cart"></i> Mi Pedido</h2>
+        <div style="max-height: 400px; overflow-y:auto;">${cartHtml}</div>
+        <div style="border-top:2px solid var(--border); margin-top:15px; padding-top:15px;">
+            <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:900; color:var(--text-main);">
+                <span>Total:</span><span>Q${total.toLocaleString()}</span>
+            </div>
+            <button onclick="checkoutWhatsApp(${total})" class="btn-wa">Finalizar Pedido por WhatsApp</button>
+        </div>`;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function checkoutWhatsApp(total) {
+    const items = cartList.map(id => phones.find(x => x.id === id).name).join(', ');
+    const msg = `Hola Jazzcel! Quisiera pedir:\n\nEquipos: ${items}\nTotal: Q${total.toLocaleString()}`;
+    window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// Iniciar carga
+load();
+</script>
+
+</body>
+</html>

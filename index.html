@@ -341,7 +341,6 @@
 </div>
 
 <script>
-// El resto de tu script permanece intacto y funcional
 const phones = [
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -558,8 +557,8 @@ function showDetail(id) {
                 <div style="color:#ccc; font-size:24px; margin-bottom:15px;" id="starInput">
                     ${[1,2,3,4,5].map(n => `<i class="fas fa-star ${n<=selectedRating?'active':''}" style="cursor:pointer; color:${n<=selectedRating?'var(--stars)':'#ccc'}" onclick="setRating(${n})"></i>`).join('')}
                 </div>
-                <textarea id="reviewText" placeholder="Tu opinión..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:15px; margin-bottom:10px; background:var(--bg-card); color:var(--text-main);"></textarea>
-                <button onclick="saveReview(${p.id})" style="background:var(--accent); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; width:100%; font-weight:bold;">Publicar</button>
+                <textarea id="revText" placeholder="Cuéntanos tu experiencia..." style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-main); font-family:inherit; resize:none; box-sizing:border-box;"></textarea>
+                <button onclick="saveReview(${p.id})" style="margin-top:10px; width:100%; padding:10px; border-radius:10px; border:none; background:var(--accent); color:white; font-weight:bold; cursor:pointer;">Publicar Reseña</button>
             </div>
             <div id="reviewsList">${reviewsHtml}</div>
         </div>
@@ -567,69 +566,95 @@ function showDetail(id) {
     document.getElementById("modal").style.display = "flex";
 }
 
-function toggleCart(e, id) {
-    if(e) e.stopPropagation();
-    if(cartList.includes(id)) cartList = cartList.filter(i => i !== id);
-    else cartList.push(id);
-    load();
-}
-
-function updateCartUI() {
-    const floatBtn = document.getElementById("cartFloat");
-    document.getElementById("cartCount").innerText = cartList.length;
-    floatBtn.style.display = cartList.length > 0 ? "flex" : "none";
-}
-
-function toggleFavorite(e, id) {
-    e.stopPropagation();
-    if(favorites.includes(id)) favorites = favorites.filter(i => i !== id);
-    else favorites.push(id);
-    localStorage.setItem('jazz_favs', JSON.stringify(favorites));
-    load();
-}
-
+// FUNCIONES DE SOPORTE FALTANTES
 function setRating(n) {
     selectedRating = n;
-    const stars = document.getElementById("starInput").querySelectorAll('i');
-    stars.forEach((s, i) => s.style.color = i < n ? 'var(--stars)' : '#ccc');
+    const stars = document.querySelectorAll('#starInput i');
+    stars.forEach((s, i) => {
+        s.style.color = i < n ? 'var(--stars)' : '#ccc';
+    });
 }
 
 function saveReview(id) {
-    const text = document.getElementById("reviewText").value;
-    if(!text) return;
+    const text = document.getElementById('revText').value;
+    if(!text.trim()) return alert("Escribe un comentario");
     if(!reviews[id]) reviews[id] = [];
-    reviews[id].push({stars: selectedRating, text});
+    reviews[id].push({stars: selectedRating, text: text});
     localStorage.setItem('jazz_revs_v7', JSON.stringify(reviews));
     showDetail(id);
 }
 
+function toggleFavorite(e, id) {
+    if(e) e.stopPropagation();
+    if(favorites.includes(id)) {
+        favorites = favorites.filter(f => f !== id);
+    } else {
+        favorites.push(id);
+    }
+    localStorage.setItem('jazz_favs', JSON.stringify(favorites));
+    load();
+}
+
+function toggleCart(e, id) {
+    if(e) e.stopPropagation();
+    if(cartList.includes(id)) {
+        cartList = cartList.filter(c => c !== id);
+    } else {
+        cartList.push(id);
+    }
+    load();
+}
+
+function updateCartUI() {
+    const float = document.getElementById("cartFloat");
+    const count = document.getElementById("cartCount");
+    if(cartList.length > 0) {
+        float.style.display = "flex";
+        count.innerText = cartList.length;
+    } else {
+        float.style.display = "none";
+    }
+}
+
 function openCartModal() {
     const items = cartList.map(id => phones.find(p => p.id === id));
-    let total = items.reduce((sum, p) => sum + p.price, 0);
-    let html = `<span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span><h2 style="margin-bottom:25px;">Tu Pedido</h2>`;
+    const total = items.reduce((a,b) => a + b.price, 0);
     
-    if(items.length === 0) html += "<p>Vacio...</p>";
-    else {
-        html += items.map(p => `<div style="display:flex; justify-content:space-between; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border)"><span>${p.name}</span><b>Q${p.price}</b></div>`).join('');
-        html += `<div style="font-size:22px; margin-top:20px; text-align:right;">Total: <span style="color:var(--accent)">Q${total}</span></div>`;
-        html += `<button onclick="sendWA()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; margin-top:20px; font-weight:bold; font-size:16px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp</button>`;
-    }
-    
-    document.getElementById("modalContent").innerHTML = html;
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <h2 style="text-align:center;">Tu Pedido</h2>
+        <div style="margin:20px 0;">
+            ${items.map(p => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
+                    <span>${p.name}</span>
+                    <b>Q${p.price}</b>
+                </div>
+            `).join('')}
+            <div style="display:flex; justify-content:space-between; padding:20px 0; font-size:20px; font-weight:800; color:var(--accent);">
+                <span>Total:</span>
+                <span>Q${total.toLocaleString()}</span>
+            </div>
+        </div>
+        <button onclick="sendWhatsApp()" style="width:100%; padding:18px; border-radius:15px; border:none; background:var(--success); color:white; font-size:18px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+            <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
+        </button>
+    `;
     document.getElementById("modal").style.display = "flex";
 }
 
-function sendWA() {
+function sendWhatsApp() {
     const items = cartList.map(id => phones.find(p => p.id === id));
-    let msg = "¡Hola JAZZCEL! Me interesan estos equipos:\n\n";
-    items.forEach(p => msg += `- ${p.name} (Q${p.price})\n`);
-    msg += `\nTotal: Q${items.reduce((s,p)=>s+p.price,0)}`;
-    window.open(`https://wa.me/50255555555?text=${encodeURIComponent(msg)}`);
+    const total = items.reduce((a,b) => a + b.price, 0);
+    let msg = `Hola JAZZCEL, me interesan estos equipos:%0A%0A`;
+    items.forEach(p => msg += `- ${p.name} (Q${p.price})%0A`);
+    msg += `%0A*Total: Q${total}*%0A¿Tienen disponibilidad?`;
+    window.open(`https://wa.me/502XXXXXXXX?text=${msg}`); // Cambia las X por tu número
 }
 
 function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-window.onload = load;
+// Carga inicial
+load();
 </script>
 
 </body>

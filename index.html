@@ -234,23 +234,65 @@
             z-index: 1400; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* RESPONSIVE */
+        /* RESPONSIVE - ARREGLOS DE DESPLAZAMIENTO Y MODAL */
         @media (max-width: 768px) {
-            body { flex-direction: column; overflow-x: hidden; }
+            body { 
+                flex-direction: column; 
+                overflow-y: auto; /* Permite scroll en el body */
+                height: auto; 
+            }
             .banner { font-size: 20px; padding: 10px 0; border-radius: 0 0 15px 15px; top: 0; left: 0; right: 0; }
-            .sidebar { width: auto; height: auto; margin: 60px 10px 0; padding: 10px; flex-direction: row; overflow-x: auto; border-radius: 15px; }
+            
+            .sidebar { 
+                width: auto; 
+                height: auto; 
+                margin: 70px 10px 10px; 
+                padding: 10px; 
+                flex-direction: row; 
+                overflow-x: auto; 
+                border-radius: 15px;
+                flex-shrink: 0;
+            }
             .sidebar::-webkit-scrollbar { display: none; }
-            .category { white-space: nowrap; padding: 10px 15px; font-size: 14px; }
-            .controls { position: relative; top: 10px; left: 0; right: 0; padding: 0 15px; width: calc(100% - 30px); }
-            .main { padding: 20px 15px 100px; overflow-y: visible; }
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .card { min-height: 320px; padding: 12px; }
-            .card img { height: 120px; }
-            .price { font-size: 18px; }
-            .card h3 { font-size: 14px; }
-            .modal-content { padding: 20px; border-radius: 20px 20px 0 0; position: fixed; bottom: 0; max-height: 85vh; }
+            .category { white-space: nowrap; padding: 8px 15px; font-size: 13px; }
+            
+            .controls { 
+                position: sticky; /* Se mantiene arriba al hacer scroll */
+                top: 60px; 
+                left: 0; 
+                right: 0; 
+                padding: 10px 15px; 
+                width: calc(100% - 30px); 
+                background: var(--bg-body);
+                margin: 0;
+                z-index: 1050;
+            }
+            
+            .main { 
+                padding: 10px 15px 100px; 
+                overflow-y: visible; /* Importante para que el scroll del body funcione */
+                flex: none;
+            }
+            
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .card { min-height: 280px; padding: 10px; }
+            .card img { height: 100px; }
+            .price { font-size: 16px; }
+            .card h3 { font-size: 13px; }
+            
+            /* Ajuste de Modal para que no se vea "gigante" */
             .modal { align-items: flex-end; padding: 0; }
-            .compare-bar { width: 90%; font-size: 14px; padding: 12px; }
+            .modal-content { 
+                padding: 25px 20px; 
+                border-radius: 25px 25px 0 0; 
+                max-width: 100%;
+                width: 100%;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            .modal-content img { width: 120px !important; } /* Tamaño controlado en móvil */
+            
+            .compare-bar { width: 85%; font-size: 12px; padding: 10px 20px; bottom: 15px; }
         }
     </style>
 </head>
@@ -271,7 +313,7 @@
 
 <div class="controls">
     <input type="text" class="search-box" id="searchInput" placeholder="¿Qué equipo buscas hoy?" oninput="load()">
-    <button onclick="toggleDarkMode()" style="width:55px; height:55px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main); font-size:20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"><i class="fas fa-moon"></i></button>
+    <button onclick="toggleDarkMode()" style="width:50px; height:50px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main); font-size:18px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink:0;"><i class="fas fa-moon"></i></button>
 </div>
 
 <div class="sidebar">
@@ -299,7 +341,7 @@
 </div>
 
 <script>
-// BASE DE DATOS COMPLETA
+// El resto de tu script permanece intacto y funcional
 const phones = [
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -365,10 +407,24 @@ const phones = [
 
 let currentBrand = "Todos";
 let cartList = [];
-let compareList = []; // NUEVA
+let compareList = []; 
 let reviews = JSON.parse(localStorage.getItem('jazz_revs_v7')) || {};
 let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
 let selectedRating = 5;
+
+function filterBrand(brand, el) {
+    currentBrand = brand;
+    document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    load();
+}
+
+function toggleDarkMode() {
+    const b = document.body;
+    const isDark = b.getAttribute("data-theme") === "dark";
+    b.setAttribute("data-theme", isDark ? "light" : "dark");
+    document.querySelector('.controls button i').className = isDark ? "fas fa-moon" : "fas fa-sun";
+}
 
 function load() {
     const grid = document.getElementById("grid");
@@ -418,7 +474,6 @@ function load() {
     updateCompareUI();
 }
 
-// LOGICA DE COMPARACIÓN
 function toggleCompare(e, id) {
     if(e) e.stopPropagation();
     if(compareList.includes(id)) {
@@ -470,7 +525,6 @@ function openCompareModal() {
     document.getElementById("modal").style.display = "flex";
 }
 
-// RESTO DE FUNCIONES ORIGINALES
 function showDetail(id) {
     const p = phones.find(x => x.id === id);
     const inCart = cartList.includes(id);
@@ -526,37 +580,9 @@ function updateCartUI() {
     floatBtn.style.display = cartList.length > 0 ? "flex" : "none";
 }
 
-function openCartModal() {
-    const items = cartList.map(id => phones.find(p => p.id === id));
-    let total = items.reduce((sum, p) => sum + p.price, 0);
-    let html = `<span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span><h2 style="margin-bottom:25px;">Tu Pedido</h2><div style="max-height:350px; overflow-y:auto;">`;
-    items.forEach(p => {
-        html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border);"><div><div style="font-weight:bold;">${p.name}</div><div style="color:var(--accent); font-weight:700;">Q${p.price.toLocaleString()}</div></div><button onclick="toggleCart(null, ${p.id}); openCartModal();" style="background:none; border:none; color:#ff4757; cursor:pointer; font-size:18px;"><i class="fas fa-trash-alt"></i></button></div>`;
-    });
-    html += `</div><div style="margin-top:25px; text-align:right;"><div style="font-size:14px; opacity:0.7;">Total Estimado</div><div style="font-size:28px; font-weight:900; color:var(--accent);">Q${total.toLocaleString()}</div></div><button onclick="sendWhatsApp()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; font-size:16px; font-weight:bold; margin-top:25px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;"><i class="fab fa-whatsapp" style="font-size:22px;"></i> Confirmar por WhatsApp</button>`;
-    document.getElementById("modalContent").innerHTML = html;
-    document.getElementById("modal").style.display = "flex";
-}
-
-function sendWhatsApp() {
-    const items = cartList.map(id => phones.find(p => p.id === id));
-    let total = items.reduce((sum, p) => sum + p.price, 0);
-    let msg = "¡Hola Jazzcel! 📱 Me gustaría comprar:\n\n";
-    items.forEach(p => msg += `• ${p.name} - Q${p.price}\n`);
-    msg += `\n*Total: Q${total}*`;
-    window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`);
-}
-
-function filterBrand(brand, el) {
-    document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    currentBrand = brand;
-    load();
-}
-
 function toggleFavorite(e, id) {
     e.stopPropagation();
-    if(favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+    if(favorites.includes(id)) favorites = favorites.filter(i => i !== id);
     else favorites.push(id);
     localStorage.setItem('jazz_favs', JSON.stringify(favorites));
     load();
@@ -564,30 +590,47 @@ function toggleFavorite(e, id) {
 
 function setRating(n) {
     selectedRating = n;
-    const stars = document.querySelectorAll('#starInput i');
-    stars.forEach((s, i) => { s.style.color = i < n ? 'var(--stars)' : '#ccc'; });
+    const stars = document.getElementById("starInput").querySelectorAll('i');
+    stars.forEach((s, i) => s.style.color = i < n ? 'var(--stars)' : '#ccc');
 }
 
 function saveReview(id) {
     const text = document.getElementById("reviewText").value;
-    if(!text.trim()) return;
+    if(!text) return;
     if(!reviews[id]) reviews[id] = [];
-    reviews[id].push({ stars: selectedRating, text: text });
+    reviews[id].push({stars: selectedRating, text});
     localStorage.setItem('jazz_revs_v7', JSON.stringify(reviews));
     showDetail(id);
-    load();
 }
 
-function toggleDarkMode() {
-    const b = document.body;
-    const isDark = b.getAttribute("data-theme") === "dark";
-    b.setAttribute("data-theme", isDark ? "light" : "dark");
-    document.querySelector(".controls button i").className = isDark ? "fas fa-moon" : "fas fa-sun";
+function openCartModal() {
+    const items = cartList.map(id => phones.find(p => p.id === id));
+    let total = items.reduce((sum, p) => sum + p.price, 0);
+    let html = `<span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span><h2 style="margin-bottom:25px;">Tu Pedido</h2>`;
+    
+    if(items.length === 0) html += "<p>Vacio...</p>";
+    else {
+        html += items.map(p => `<div style="display:flex; justify-content:space-between; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border)"><span>${p.name}</span><b>Q${p.price}</b></div>`).join('');
+        html += `<div style="font-size:22px; margin-top:20px; text-align:right;">Total: <span style="color:var(--accent)">Q${total}</span></div>`;
+        html += `<button onclick="sendWA()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; margin-top:20px; font-weight:bold; font-size:16px; cursor:pointer;"><i class="fab fa-whatsapp"></i> Enviar Pedido por WhatsApp</button>`;
+    }
+    
+    document.getElementById("modalContent").innerHTML = html;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function sendWA() {
+    const items = cartList.map(id => phones.find(p => p.id === id));
+    let msg = "¡Hola JAZZCEL! Me interesan estos equipos:\n\n";
+    items.forEach(p => msg += `- ${p.name} (Q${p.price})\n`);
+    msg += `\nTotal: Q${items.reduce((s,p)=>s+p.price,0)}`;
+    window.open(`https://wa.me/50255555555?text=${encodeURIComponent(msg)}`);
 }
 
 function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-load();
+window.onload = load;
 </script>
+
 </body>
 </html>

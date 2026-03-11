@@ -24,13 +24,11 @@
 
         .banner { position: fixed; top: 0; left: 0; right: 0; background: #001a57; color: white; padding: 15px; text-align: center; font-size: 22px; font-weight: 900; letter-spacing: 5px; z-index: 1100; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
-        /* Categorías / Sidebar */
         .sidebar { width: 260px; background: var(--bg-sidebar); margin: 85px 0 15px 15px; border-radius: 20px; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; overflow-y: auto; }
         
         .main { flex: 1; padding: 140px 30px 40px; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
 
-        /* --- RESPONSIVE CELULAR --- */
         @media (max-width: 768px) {
             body { flex-direction: column; overflow: auto; }
             .sidebar { 
@@ -50,23 +48,27 @@
             .banner { font-size: 18px; padding: 12px; height: 52px; }
         }
 
-        /* Estilos Originales */
         .category { color: white; cursor: pointer; border-radius: 10px; display: flex; align-items: center; gap: 10px; transition: 0.3s; padding: 12px; }
         .category:hover, .category.active { background: white; color: #001a57; }
-        .card { background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid var(--border); position: relative; display: flex; flex-direction: column; height: 360px; }
+        .card { background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid var(--border); position: relative; display: flex; flex-direction: column; height: 380px; }
         .card img { width: 100%; height: 130px; object-fit: contain; }
         .price { font-size: 18px; font-weight: 800; color: var(--accent); margin: 8px 0; }
         .fav-badge { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 18px; color: #ccc; }
         .fav-badge.active { color: var(--heart); }
         .search-box { padding: 10px 20px; border-radius: 25px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); outline: none; }
-        .cart-float { position: fixed; bottom: 25px; right: 25px; background: var(--success); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1500; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .cart-float { position: fixed; bottom: 25px; right: 25px; background: var(--success); color: white; width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; z-index: 1500; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: none; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px); padding: 15px; }
-        .modal-content { background: var(--bg-card); width: 100%; max-width: 600px; border-radius: 25px; padding: 25px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-content { background: var(--bg-card); width: 100%; max-width: 500px; border-radius: 25px; padding: 25px; max-height: 85vh; overflow-y: auto; position: relative; }
         .spec-icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
         .spec-item { background: var(--bg-specs); padding: 10px; border-radius: 12px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
-        .btn-wa { background: var(--success); color: white; padding: 14px; border-radius: 12px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; margin-top: 15px; }
-        .review-section { border-top: 1px solid var(--border); margin-top: 20px; padding-top: 15px; }
-        .stars { color: var(--stars); margin-bottom: 5px; }
+        .btn-wa { background: var(--success); color: white; padding: 14px; border-radius: 12px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold; margin-top: 15px; border: none; width: 100%; font-size: 16px; cursor: pointer; }
+        
+        /* Estilos del Carrito */
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .cart-item-info { display: flex; flex-direction: column; }
+        .cart-item-name { font-weight: bold; font-size: 14px; }
+        .cart-item-price { color: var(--accent); font-size: 13px; }
+        .remove-btn { color: #ff4757; cursor: pointer; padding: 5px; }
         .compare-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0052ff; color: white; padding: 15px; display: none; justify-content: space-between; align-items: center; z-index: 1600; }
     </style>
 </head>
@@ -74,13 +76,13 @@
 
 <div class="banner">JAZZCEL</div>
 
-<div class="cart-float" id="cartFloat" onclick="openCartModal()">
+<button class="cart-float" id="cartFloat" onclick="openCartModal()">
     <i class="fas fa-shopping-cart"></i>
-    <div id="cartCount" style="position:absolute; top:0; right:0; background:red; border-radius:50%; width:20px; height:20px; font-size:11px; display:flex; justify-content:center; align-items:center;">0</div>
-</div>
+    <div id="cartCount" style="position:absolute; top:0; right:0; background:red; border-radius:50%; width:22px; height:22px; font-size:12px; display:flex; justify-content:center; align-items:center; font-weight:bold;">0</div>
+</button>
 
 <div class="compare-bar" id="compareBar">
-    <span id="compareText">2 productos seleccionados</span>
+    <span id="compareText">2 seleccionados</span>
     <button onclick="startComparison()" style="background:white; color:#0052ff; border:none; padding:8px 15px; border-radius:8px; font-weight:bold;">COMPARAR</button>
 </div>
 
@@ -110,7 +112,6 @@
 </div>
 
 <script>
-// AQUÍ ESTÁN TUS 55 PRODUCTOS ORIGINALES
 const phones = [
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -172,34 +173,28 @@ const phones = [
 let currentBrand = "Todos";
 let cart = [];
 let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
-let reviews = JSON.parse(localStorage.getItem('jazz_revs')) || {};
 let compareList = [];
 
 function load() {
     const grid = document.getElementById("grid");
     const search = document.getElementById("searchInput").value.toLowerCase();
-    
     const filtered = phones.filter(p => {
-        const matchBrand = (currentBrand === "Todos") || 
-                           (currentBrand === "Favoritos" ? favorites.includes(p.id) : p.brand === currentBrand);
-        const matchSearch = p.name.toLowerCase().includes(search) || p.ram.toLowerCase().includes(search);
-        return matchBrand && matchSearch;
+        const matchBrand = (currentBrand === "Todos") || (currentBrand === "Favoritos" ? favorites.includes(p.id) : p.brand === currentBrand);
+        return matchBrand && (p.name.toLowerCase().includes(search) || p.ram.toLowerCase().includes(search));
     });
-
     document.getElementById("items-count").innerText = filtered.length;
-    
     grid.innerHTML = filtered.map(p => {
         const isFav = favorites.includes(p.id);
         const isComparing = compareList.includes(p.id);
         return `
             <div class="card" onclick="showDetail(${p.id})">
                 <i class="fas fa-heart fav-badge ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${p.id})"></i>
-                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150'">
+                <img src="${p.img}">
                 <h3 style="font-size:13px; margin:10px 0;">${p.name}</h3>
                 <div class="price">Q${p.price.toLocaleString()}</div>
                 <div style="display:flex; gap:5px; margin-top:auto;">
-                    <button onclick="addToCart(event, ${p.id})" style="flex:1; background:var(--success); color:white; border:none; padding:8px; border-radius:8px; font-size:10px;"><i class="fas fa-plus"></i> CARRITO</button>
-                    <button onclick="toggleCompare(event, ${p.id})" style="background:${isComparing ? '#ffc107':'#eee'}; border:none; padding:8px; border-radius:8px;"><i class="fas fa-columns"></i></button>
+                    <button onclick="addToCart(event, ${p.id})" class="btn-wa" style="margin:0; flex:1; font-size:11px; padding:10px;"><i class="fas fa-cart-plus"></i> + CARRITO</button>
+                    <button onclick="toggleCompare(event, ${p.id})" style="background:${isComparing ? '#ffc107':'#eee'}; border:none; border-radius:10px; padding:0 12px; cursor:pointer;"><i class="fas fa-columns"></i></button>
                 </div>
             </div>
         `;
@@ -223,49 +218,83 @@ function toggleFavorite(e, id) {
 
 function addToCart(e, id) {
     e.stopPropagation();
-    cart.push(phones.find(p => p.id === id));
+    const product = phones.find(p => p.id === id);
+    cart.push(product);
     document.getElementById("cartCount").innerText = cart.length;
+}
+
+function openCartModal() {
+    let cartHtml = `<h3>Mi Carrito (${cart.length})</h3>`;
+    if (cart.length === 0) {
+        cartHtml += `<p style="text-align:center; padding:20px;">Tu carrito está vacío.</p>`;
+    } else {
+        let total = 0;
+        cartHtml += `<div style="margin:15px 0;">`;
+        cart.forEach((item, index) => {
+            total += item.price;
+            cartHtml += `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <span class="cart-item-name">${item.name}</span>
+                        <span class="cart-item-price">Q${item.price.toLocaleString()}</span>
+                    </div>
+                    <i class="fas fa-trash remove-btn" onclick="removeFromCart(${index})"></i>
+                </div>`;
+        });
+        cartHtml += `</div><div style="font-size:20px; font-weight:bold; margin:15px 0; text-align:right;">Total: Q${total.toLocaleString()}</div>`;
+        
+        const waLink = `https://wa.me/50200000000?text=Hola Jazzcel, quiero pedir:%0A` + 
+                       cart.map(i => `- ${i.name} (Q${i.price})`).join('%0A') + 
+                       `%0A%0ATotal: Q${total.toLocaleString()}`;
+        
+        cartHtml += `<a href="${waLink}" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> ENVIAR PEDIDO POR WHATSAPP</a>`;
+    }
+    document.getElementById("modalContent").innerHTML = `<span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>` + cartHtml;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    document.getElementById("cartCount").innerText = cart.length;
+    openCartModal(); // Recarga la lista
 }
 
 function toggleCompare(e, id) {
     e.stopPropagation();
     if(compareList.includes(id)) compareList = compareList.filter(i => i !== id);
     else if(compareList.length < 2) compareList.push(id);
-    
-    const bar = document.getElementById("compareBar");
-    bar.style.display = compareList.length > 0 ? "flex" : "none";
-    document.getElementById("compareText").innerText = `${compareList.length} para comparar`;
+    document.getElementById("compareBar").style.display = compareList.length > 0 ? "flex" : "none";
+    document.getElementById("compareText").innerText = `${compareList.length} seleccionados`;
     load();
 }
 
 function startComparison() {
-    if(compareList.length < 2) return alert("Elige 2 equipos");
+    if(compareList.length < 2) return alert("Selecciona 2 equipos para comparar");
     const p1 = phones.find(x => x.id === compareList[0]);
     const p2 = phones.find(x => x.id === compareList[1]);
-    
     document.getElementById("modalContent").innerHTML = `
-        <h3>Comparativa</h3>
-        <table style="width:100%; border-collapse:collapse; text-align:center;">
-            <tr><td></td><td><img src="${p1.img}" width="80"></td><td><img src="${p2.img}" width="80"></td></tr>
-            <tr style="border-bottom:1px solid #eee"><td><b>Modelo</b></td><td>${p1.name}</td><td>${p2.name}</td></tr>
-            <tr style="border-bottom:1px solid #eee"><td><b>RAM</b></td><td>${p1.ram}</td><td>${p2.ram}</td></tr>
-            <tr style="border-bottom:1px solid #eee"><td><b>Cámara</b></td><td>${p1.cam}</td><td>${p2.cam}</td></tr>
-            <tr style="border-bottom:1px solid #eee"><td><b>Batería</b></td><td>${p1.bat}</td><td>${p2.bat}</td></tr>
-            <tr><td><b>Precio</b></td><td style="color:blue">Q${p1.price}</td><td style="color:blue">Q${p2.price}</td></tr>
-        </table>
-        <button onclick="compareList=[]; load(); closeModal();" style="width:100%; margin-top:20px; padding:10px;">Cerrar y Limpiar</button>
+        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
+        <h3 style="text-align:center">Comparando Equipos</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; text-align:center; font-size:13px;">
+            <div><img src="${p1.img}" width="80"><br><b>${p1.name}</b></div>
+            <div><img src="${p2.img}" width="80"><br><b>${p2.name}</b></div>
+            <div style="background:#f0f0f0; padding:5px; grid-column: span 2"><b>ESPECIFICACIONES</b></div>
+            <div style="padding:5px; border-bottom:1px solid #eee">${p1.ram} RAM</div><div style="padding:5px; border-bottom:1px solid #eee">${p2.ram} RAM</div>
+            <div style="padding:5px; border-bottom:1px solid #eee">${p1.cam} Cam</div><div style="padding:5px; border-bottom:1px solid #eee">${p2.cam} Cam</div>
+            <div style="padding:5px; border-bottom:1px solid #eee">${p1.bat} Bat</div><div style="padding:5px; border-bottom:1px solid #eee">${p2.bat} Bat</div>
+            <div style="padding:10px; font-weight:bold; color:blue">Q${p1.price}</div><div style="padding:10px; font-weight:bold; color:blue">Q${p2.price}</div>
+        </div>
+        <button onclick="compareList=[]; load(); closeModal();" class="btn-wa" style="background:#666">LIMPIAR COMPARATIVA</button>
     `;
     document.getElementById("modal").style.display = "flex";
 }
 
 function showDetail(id) {
     const p = phones.find(x => x.id === id);
-    const pReviews = reviews[id] || [];
-    
     document.getElementById("modalContent").innerHTML = `
         <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
         <img src="${p.img}" style="width:100%; height:200px; object-fit:contain;">
-        <h2>${p.name}</h2>
+        <h2 style="margin-bottom:5px;">${p.name}</h2>
         <div class="price" style="font-size:24px;">Q${p.price.toLocaleString()}</div>
         <div class="spec-icon-grid">
             <div class="spec-item"><i class="fas fa-microchip"></i> RAM: ${p.ram}</div>
@@ -273,39 +302,16 @@ function showDetail(id) {
             <div class="spec-item"><i class="fas fa-battery-full"></i> Bat: ${p.bat}</div>
             <div class="spec-item"><i class="fas fa-tag"></i> ${p.brand}</div>
         </div>
-        
-        <div class="review-section">
-            <h4>Reseñas de clientes</h4>
-            <div id="reviewList">${pReviews.map(r => `<p>⭐ ${r}</p>`).join('') || 'Sin reseñas aún'}</div>
-            <div style="margin-top:10px;">
-                <input type="text" id="revInp" placeholder="Escribe tu opinión..." style="width:70%; padding:8px; border-radius:8px; border:1px solid #ccc;">
-                <button onclick="addReview(${id})" style="padding:8px 12px; background:var(--accent); color:white; border:none; border-radius:8px;">Enviar</button>
-            </div>
-        </div>
-
-        <a href="https://wa.me/50200000000?text=Hola Jazzcel, me interesa el ${p.name}" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Comprar ahora
-        </a>
+        <button onclick="addToCart(event, ${p.id}); closeModal();" class="btn-wa"><i class="fas fa-cart-plus"></i> AGREGAR AL CARRITO</button>
     `;
     document.getElementById("modal").style.display = "flex";
-}
-
-function addReview(id) {
-    const val = document.getElementById("revInp").value;
-    if(!val) return;
-    if(!reviews[id]) reviews[id] = [];
-    reviews[id].push(val);
-    localStorage.setItem('jazz_revs', JSON.stringify(reviews));
-    showDetail(id);
 }
 
 function toggleDarkMode() {
     const b = document.body;
     b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 }
-
 function closeModal() { document.getElementById("modal").style.display = "none"; }
-function openCartModal() { alert("Carrito: " + cart.length + " productos seleccionados."); }
 
 load();
 </script>

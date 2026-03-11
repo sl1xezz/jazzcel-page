@@ -613,7 +613,7 @@ function openCartModal() {
 
 function sendWhatsApp() {
     const msg = "Hola JAZZCEL, quiero pedir esto:\n" + cartList.map(id => "- " + phones.find(p => p.id === id).name).join("\n");
-    window.open(`https://wa.me+502 4776 3486?text=${encodeURIComponent(msg)}`);
+    window.open(`https://wa.me50247763486?text=${encodeURIComponent(msg)}`);
 }
 
 function closeModal() { document.getElementById("modal").style.display = "none"; }
@@ -622,4 +622,5 @@ load();
 </script>
 </body>
 </html>
+
 

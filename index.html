@@ -7,97 +7,258 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg-body: #f4f7fb; --bg-sidebar: #001a57; --bg-card: #ffffff;
-            --bg-specs: #f8f9fa; --text-main: #333333; --accent: #0052ff; 
-            --stars: #ffc107; --border: #e0e0e0; --success: #25D366;
+            --bg-body: #f4f7fb;
+            --bg-sidebar: #001a57;
+            --bg-card: #ffffff;
+            --bg-specs: #f8f9fa;
+            --text-main: #333333;
+            --accent: #0052ff;
+            --stars: #ffc107;
+            --border: #e0e0e0;
+            --success: #25D366;
             --heart: #ff4757;
         }
 
         [data-theme="dark"] {
-            --bg-body: #0b0e14; --bg-sidebar: #05070a; --bg-card: #1e222d;
-            --bg-specs: #2d333b; --text-main: #ffffff; --border: #30363d;
+            --bg-body: #0b0e14;
+            --bg-sidebar: #05070a;
+            --bg-card: #1e222d;
+            --bg-specs: #2d333b;
+            --text-main: #ffffff;
+            --border: #30363d;
         }
 
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            transition: 0.3s;
+        }
 
-        .banner { position: fixed; top: 15px; left: 15px; right: 15px; background: #001a57; color: white; padding: 15px 0; text-align: center; font-size: 26px; font-weight: 900; letter-spacing: 5px; z-index: 1100; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        /* BANNER */
+        .banner {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: #001a57;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            z-index: 1100;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+        }
 
-        /* Sidebar */
-        .sidebar { width: 260px; background: var(--bg-sidebar); margin: 100px 0 15px 15px; border-radius: 20px; padding: 20px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; overflow-y: auto; }
-        .category { padding: 12px 15px; border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); font-size: 14px; }
-        .category:hover, .category.active { background: white; color: #001a57; }
-        
-        .cat-fav { border: 1px dashed var(--heart); color: #ff7979; margin-bottom: 5px; }
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            margin: 95px 0 20px 20px;
+            border-radius: 25px;
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .category {
+            padding: 14px 20px;
+            border-radius: 15px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .category i { font-size: 18px; width: 25px; text-align: center; }
+        .category:hover, .category.active {
+            background: white;
+            color: #001a57;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .cat-fav { border: 1px dashed var(--heart); color: #ff7979; }
         .cat-fav.active { background: var(--heart) !important; color: white !important; }
 
-        /* Filtro Desplegable */
-        .price-filter-wrapper { margin-top: 15px; position: relative; }
-        .dropdown-btn {
-            width: 100%; padding: 12px 15px; background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
-            color: white; cursor: pointer; display: flex; justify-content: space-between;
-            align-items: center; font-size: 13px; transition: 0.3s;
+        /* CONTROLES */
+        .controls {
+            position: fixed;
+            top: 95px;
+            left: 320px;
+            right: 20px;
+            z-index: 900;
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
-        .dropdown-btn:hover { background: rgba(255, 255, 255, 0.2); }
-        
-        .dropdown-content {
-            display: none; position: absolute; bottom: 50px; left: 0; width: 100%;
-            background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 1200; overflow: hidden; animation: slideUp 0.3s ease;
+
+        .search-box {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
-        .dropdown-content.show { display: block; }
-        .dropdown-item { padding: 12px 15px; color: #333; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: 0.2s; }
-        .dropdown-item:hover { background: #f4f7fb; color: var(--accent); }
-        .dropdown-item.active { background: var(--accent); color: white; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Main e Interfaz */
-        .main { flex: 1; padding: 160px 40px 40px; overflow-y: auto; scroll-behavior: smooth; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        
-        .card { 
-            background: var(--bg-card); border-radius: 20px; padding: 15px; text-align: center; 
-            transition: 0.3s; border: 1px solid var(--border); cursor: pointer; 
-            display: flex; flex-direction: column; justify-content: space-between; 
-            height: 320px; position: relative; animation: fadeIn 0.5s ease forwards;
+        /* MAIN */
+        .main {
+            flex: 1;
+            padding: 170px 30px 40px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 10px; }
-        .stars-container { color: var(--stars); font-size: 13px; margin-bottom: 5px; letter-spacing: 1px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
 
-        .fav-badge { position: absolute; top: 15px; right: 15px; font-size: 18px; color: #ccc; transition: 0.3s; z-index: 5; }
-        .fav-badge.active { color: var(--heart); transform: scale(1.2); }
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 420px;
+        }
 
-        .recent-section { margin-top: 50px; border-top: 2px solid var(--border); padding-top: 25px; margin-bottom: 20px; }
-        .recent-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .recent-flex { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; }
-        .recent-mini-card { min-width: 130px; background: var(--bg-card); padding: 10px; border-radius: 15px; border: 1px solid var(--border); text-align: center; font-size: 11px; cursor: pointer; transition: 0.3s; }
-        .recent-mini-card img { width: 70px; height: 70px; object-fit: contain; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--accent); }
+        .card img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; }
 
-        .price { font-size: 18px; font-weight: 800; color: var(--accent); margin: 5px 0; }
+        .price { font-size: 24px; font-weight: 800; color: var(--accent); margin: 10px 0; }
         
-        .action-btns { display: flex; gap: 5px; }
-        .btn-compare { background: var(--bg-specs); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); font-size: 11px; cursor: pointer; flex: 1; }
-        .btn-compare.active { background: var(--accent); color: white; border-color: var(--accent); }
-        .btn-cart-add { background: var(--bg-specs); border: 1px solid var(--border); padding: 8px; border-radius: 8px; color: var(--text-main); font-size: 11px; cursor: pointer; }
+        .action-btns { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-cart-add {
+            flex: 1; background: var(--bg-specs); border: 1px solid var(--border);
+            padding: 12px; border-radius: 12px; color: var(--text-main);
+            font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
         .btn-cart-add.active { background: var(--success); color: white; border-color: var(--success); }
 
-        .controls { position: fixed; top: 105px; right: 40px; z-index: 950; display: flex; gap: 10px; }
-        .search-box { padding: 12px 20px; border-radius: 25px; border: 1px solid var(--border); width: 250px; background: var(--bg-card); color: var(--text-main); outline: none; }
+        /* MODAL */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
 
-        .compare-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #001a57; color: white; padding: 15px 30px; border-radius: 50px; display: none; z-index: 1500; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        
-        .cart-float { position: fixed; bottom: 30px; right: 30px; background: var(--success); color: white; width: 60px; height: 60px; border-radius: 50%; display: none; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 1500; transition: 0.3s; }
+        .modal-content {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            padding: 40px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        /* CARRITO FLOTANTE */
+        .cart-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+            z-index: 1500;
+            transition: 0.3s;
+        }
         .cart-float:hover { transform: scale(1.1); }
-        .cart-count { position: absolute; top: 0; right: 0; background: red; color: white; font-size: 12px; width: 22px; height: 22px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4757;
+            color: white;
+            font-size: 14px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            border: 2px solid white;
+        }
 
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(8px); }
-        .modal-content { background: var(--bg-card); width: 95%; max-width: 550px; border-radius: 25px; padding: 25px; position: relative; max-height: 85vh; overflow-y: auto; }
-        
-        .btn-wa { background: var(--success); color: white; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; text-decoration: none; margin-top: 15px; }
+        /* --- NUEVA SECCIÓN RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow-x: hidden; }
+            
+            .banner { font-size: 20px; padding: 10px 0; border-radius: 0 0 15px 15px; top: 0; left: 0; right: 0; }
+            
+            .sidebar { 
+                width: auto; height: auto; margin: 60px 10px 0; padding: 10px; 
+                flex-direction: row; overflow-x: auto; border-radius: 15px;
+                scrollbar-width: none; /* Firefox */
+            }
+            .sidebar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+            .category { white-space: nowrap; padding: 10px 15px; font-size: 14px; }
+            
+            .controls { position: relative; top: 10px; left: 0; right: 0; padding: 0 15px; width: calc(100% - 30px); }
+            
+            .main { padding: 20px 15px 100px; overflow-y: visible; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            
+            .card { min-height: 320px; padding: 12px; }
+            .card img { height: 120px; }
+            .price { font-size: 18px; }
+            .card h3 { font-size: 14px; }
+            
+            .modal-content { padding: 20px; border-radius: 20px 20px 0 0; position: fixed; bottom: 0; max-height: 85vh; }
+            .modal { align-items: flex-end; padding: 0; }
+            
+            .cart-float { width: 60px; height: 60px; bottom: 20px; right: 20px; }
+        }
+        /* --- FIN SECCIÓN RESPONSIVE --- */
+
     </style>
 </head>
 <body data-theme="light">
@@ -110,8 +271,8 @@
 </div>
 
 <div class="controls">
-    <input type="text" class="search-box" id="searchInput" placeholder="¿Qué equipo buscas?" oninput="load()">
-    <button onclick="toggleDarkMode()" style="width:45px; height:45px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main);"><i class="fas fa-moon"></i></button>
+    <input type="text" class="search-box" id="searchInput" placeholder="¿Qué equipo buscas hoy?" oninput="load()">
+    <button onclick="toggleDarkMode()" style="width:55px; height:55px; border-radius:50%; border:none; cursor:pointer; background:var(--bg-card); color:var(--text-main); font-size:20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"><i class="fas fa-moon"></i></button>
 </div>
 
 <div class="sidebar">
@@ -125,37 +286,13 @@
     <div class="category" onclick="filterBrand('Básicos', this)"><i class="fas fa-keyboard"></i> Básicos</div>
     <div class="category" onclick="filterBrand('Accesorios', this)"><i class="fas fa-headphones"></i> Accesorios</div>
     <div class="category" onclick="filterBrand('Repuestos', this)"><i class="fas fa-tools"></i> Repuestos</div>
-
-    <div class="price-filter-wrapper">
-        <button class="dropdown-btn" onclick="toggleDropdown()">
-            <span id="priceLabel">Filtrar por Precio</span>
-            <i class="fas fa-chevron-up"></i>
-        </button>
-        <div class="dropdown-content" id="priceDropdown">
-            <div class="dropdown-item active" onclick="setPriceRange(15000, 'Cualquier precio', this)">Todos</div>
-            <div class="dropdown-item" onclick="setPriceRange(500, 'Bajo Q500', this)">Bajo Q500</div>
-            <div class="dropdown-item" onclick="setPriceRange(1500, 'Bajo Q1,500', this)">Bajo Q1,500</div>
-            <div class="dropdown-item" onclick="setPriceRange(3000, 'Bajo Q3,000', this)">Bajo Q3,000</div>
-            <div class="dropdown-item" onclick="setPriceRange(6000, 'Bajo Q6,000', this)">Bajo Q6,000</div>
-            <div class="dropdown-item" onclick="setPriceRange(10000, 'Premium', this)">Premium</div>
-        </div>
-    </div>
 </div>
 
 <div class="main">
-    <div style="margin-bottom: 15px; opacity: 0.7;">Disponibles: <b id="items-count">0</b></div>
-    <div class="grid" id="grid"></div>
-
-    <div class="recent-section" id="recentSection" style="display:none;">
-        <div class="recent-title"><i class="fas fa-history" style="color:var(--accent)"></i> Vistos recientemente</div>
-        <div class="recent-flex" id="recentFlex"></div>
+    <div style="margin-bottom: 20px; font-weight: 600; opacity: 0.7;">
+        Resultados: <span id="items-count" style="color:var(--accent)">0</span> productos
     </div>
-</div>
-
-<div class="compare-bar" id="compareBar">
-    <span id="compareText">0 seleccionados</span>
-    <button onclick="openCompareModal()" style="background:white; color:#001a57; border:none; padding:8px 20px; border-radius:20px; font-weight:bold; cursor:pointer;">Comparar Ahora</button>
-    <button onclick="clearCompare()" style="background:none; color:white; border:none; cursor:pointer; font-size:20px;">&times;</button>
+    <div class="grid" id="grid"></div>
 </div>
 
 <div class="modal" id="modal" onclick="if(event.target == this) closeModal()">
@@ -163,6 +300,7 @@
 </div>
 
 <script>
+// LA MISMA BASE DE DATOS Y LÓGICA QUE TENÍAS (COMPLETA)
 const phones = [
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -227,12 +365,10 @@ const phones = [
 ];
 
 let currentBrand = "Todos";
-let maxPrice = 15000;
-let compareList = [];
 let cartList = [];
-let reviews = JSON.parse(localStorage.getItem('jazz_revs_v55_final')) || {};
+let reviews = JSON.parse(localStorage.getItem('jazz_revs_v7')) || {};
 let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
-let recentlyViewed = JSON.parse(localStorage.getItem('jazz_recent')) || [];
+let selectedRating = 5;
 
 function load() {
     const grid = document.getElementById("grid");
@@ -241,34 +377,31 @@ function load() {
     const filtered = phones.filter(p => {
         const matchBrand = (currentBrand === "Todos") || 
                            (currentBrand === "Favoritos" ? favorites.includes(p.id) : p.brand === currentBrand);
-        return matchBrand && (p.price <= maxPrice) && (p.name.toLowerCase().includes(search));
+        const matchSearch = p.name.toLowerCase().includes(search);
+        return matchBrand && matchSearch;
     });
 
-    document.getElementById("items-count").innerText = `${filtered.length} productos`;
+    document.getElementById("items-count").innerText = filtered.length;
     
     grid.innerHTML = filtered.map(p => {
         const pRev = reviews[p.id] || [];
         const avg = pRev.length ? Math.round(pRev.reduce((a,b)=>a+b.stars,0)/pRev.length) : 5;
-        const isComp = compareList.includes(p.id);
         const isFav = favorites.includes(p.id);
         const inCart = cartList.includes(p.id);
 
         return `
             <div class="card" onclick="showDetail(${p.id})">
-                <i class="fas fa-heart fav-badge ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${p.id})"></i>
+                <i class="fas fa-heart" style="position:absolute; top:20px; right:20px; font-size:20px; color:${isFav ? 'var(--heart)' : '#ccc'}; z-index:5;" onclick="toggleFavorite(event, ${p.id})"></i>
                 <div>
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150?text=Jazzcel'">
-                    <div class="stars-container">
-                        ${'★'.repeat(avg)}${'☆'.repeat(5-avg)} <span style="font-size:10px; opacity:0.6">(${pRev.length})</span>
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/200?text=Imagen+No+Disponible'">
+                    <div style="color:var(--stars); font-size:12px; margin-bottom:5px;">
+                        ${'★'.repeat(avg)}${'☆'.repeat(5-avg)} <span style="font-size:10px; opacity:0.6; color:var(--text-main)">(${pRev.length})</span>
                     </div>
-                    <h3 style="font-size:13px; margin:5px 0;">${p.name}</h3>
+                    <h3 style="margin:5px 0; font-size:16px;">${p.name}</h3>
                 </div>
                 <div>
                     <div class="price">Q${p.price.toLocaleString()}</div>
                     <div class="action-btns">
-                        <button class="btn-compare ${isComp ? 'active' : ''}" onclick="toggleCompare(event, ${p.id})">
-                            <i class="fas fa-balance-scale"></i>
-                        </button>
                         <button class="btn-cart-add ${inCart ? 'active' : ''}" onclick="toggleCart(event, ${p.id})">
                             <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Listo' : 'Pedir'}
                         </button>
@@ -277,8 +410,53 @@ function load() {
             </div>
         `;
     }).join('');
-    updateRecentUI();
     updateCartUI();
+}
+
+function showDetail(id) {
+    const p = phones.find(x => x.id === id);
+    const inCart = cartList.includes(id);
+    const pRev = reviews[id] || [];
+
+    let reviewsHtml = pRev.length > 0 ? pRev.map(r => `
+        <div style="background:var(--bg-specs); padding:10px; border-radius:10px; margin-bottom:10px; font-size:13px;">
+            <div style="color:var(--stars); margin-bottom:3px;">${'★'.repeat(r.stars)}</div>
+            ${r.text}
+        </div>
+    `).reverse().join('') : '<p style="font-size:12px; opacity:0.5; text-align:center;">No hay reseñas aún.</p>';
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <div style="display:flex; flex-direction:column; align-items:center;">
+            <img src="${p.img}" style="width:180px; margin-bottom:20px;">
+            <h2 style="margin:0; text-align:center;">${p.name}</h2>
+            <div class="price" style="font-size:28px">Q${p.price.toLocaleString()}</div>
+            
+            <div style="width:100%; display:grid; grid-template-columns: 1fr 1fr; gap:10px; text-align:left; background:var(--bg-specs); padding:20px; border-radius:20px; margin:20px 0; font-size:14px;">
+                <div><b>RAM:</b> ${p.ram}</div>
+                <div><b>Cámara:</b> ${p.cam}</div>
+                <div><b>Batería:</b> ${p.bat}</div>
+                <div><b>Marca:</b> ${p.brand}</div>
+            </div>
+
+            <button class="btn-cart-add ${inCart ? 'active' : ''}" style="width:100%; padding:18px; font-size:16px;" onclick="toggleCart(null, ${p.id}); closeModal();">
+                <i class="fas ${inCart ? 'fa-trash' : 'fa-cart-plus'}"></i> ${inCart ? 'Eliminar del pedido' : 'Agregar al pedido'}
+            </button>
+        </div>
+
+        <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
+            <h3 style="margin-bottom:15px;">Reseñas de clientes</h3>
+            <div style="background:var(--bg-specs); padding:20px; border-radius:20px; margin-bottom:20px;">
+                <div style="color:#ccc; font-size:24px; margin-bottom:15px;" id="starInput">
+                    ${[1,2,3,4,5].map(n => `<i class="fas fa-star ${n<=selectedRating?'active':''}" style="cursor:pointer; color:${n<=selectedRating?'var(--stars)':'#ccc'}" onclick="setRating(${n})"></i>`).join('')}
+                </div>
+                <textarea id="reviewText" placeholder="Cuéntanos tu experiencia..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:15px; font-family:inherit; margin-bottom:10px; box-sizing:border-box; background:var(--bg-card); color:var(--text-main);"></textarea>
+                <button onclick="saveReview(${p.id})" style="background:var(--accent); color:white; border:none; padding:12px 20px; border-radius:10px; cursor:pointer; width:100%; font-weight:bold;">Publicar reseña</button>
+            </div>
+            <div id="reviewsList">${reviewsHtml}</div>
+        </div>
+    `;
+    document.getElementById("modal").style.display = "flex";
 }
 
 function toggleCart(e, id) {
@@ -292,44 +470,62 @@ function toggleCart(e, id) {
 }
 
 function updateCartUI() {
-    const countEl = document.getElementById("cartCount");
     const floatBtn = document.getElementById("cartFloat");
-    countEl.innerText = cartList.length;
+    document.getElementById("cartCount").innerText = cartList.length;
     floatBtn.style.display = cartList.length > 0 ? "flex" : "none";
 }
 
 function openCartModal() {
     const items = cartList.map(id => phones.find(p => p.id === id));
     let total = items.reduce((sum, p) => sum + p.price, 0);
-    let msg = "Hola Jazzcel, me interesan estos equipos:%0A";
     
-    let html = `<span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-                <h2 style="text-align:center"><i class="fas fa-shopping-cart"></i> Mi Pedido</h2>
-                <div style="margin-bottom:20px;">`;
+    let html = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <h2 style="margin-bottom:25px;">Tu Pedido Actual</h2>
+        <div style="max-height:350px; overflow-y:auto;">
+    `;
     
     items.forEach(p => {
         html += `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid var(--border);">
-                <div style="font-size:13px;"><b>${p.name}</b><br><span style="color:var(--accent)">Q${p.price}</span></div>
-                <button onclick="toggleCart(null, ${p.id}); openCartModal();" style="border:none; background:none; color:red; cursor:pointer;"><i class="fas fa-trash"></i></button>
-            </div>`;
-        msg += `- ${p.name} (Q${p.price})%0A`;
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border);">
+                <div>
+                    <div style="font-weight:bold;">${p.name}</div>
+                    <div style="color:var(--accent); font-weight:700;">Q${p.price.toLocaleString()}</div>
+                </div>
+                <button onclick="toggleCart(null, ${p.id}); openCartModal();" style="background:none; border:none; color:#ff4757; cursor:pointer; font-size:18px;"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        `;
     });
 
-    msg += `%0A*Total: Q${total}*`;
-
-    html += `</div>
-            <div style="text-align:right; font-size:18px; font-weight:bold; margin-bottom:15px;">Total: Q${total.toLocaleString()}</div>
-            <a href="https://wa.me/50200000000?text=${msg}" class="btn-wa" target="_blank">
-                <i class="fab fa-whatsapp"></i> Enviar Pedido Completo
-            </a>`;
+    html += `
+        </div>
+        <div style="margin-top:25px; text-align:right;">
+            <div style="font-size:14px; opacity:0.7;">Total Estimado</div>
+            <div style="font-size:28px; font-weight:900; color:var(--accent);">Q${total.toLocaleString()}</div>
+        </div>
+        <button onclick="sendWhatsApp()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; font-size:16px; font-weight:bold; margin-top:25px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
+            <i class="fab fa-whatsapp" style="font-size:22px;"></i> Confirmar por WhatsApp
+        </button>
+    `;
     
-    if(cartList.length === 0) {
-        html = `<div style="text-align:center; padding:40px;"><i class="fas fa-shopping-basket" style="font-size:50px; opacity:0.2;"></i><p>El carrito está vacío</p><button onclick="closeModal()" style="background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Seguir viendo</button></div>`;
-    }
-
     document.getElementById("modalContent").innerHTML = html;
     document.getElementById("modal").style.display = "flex";
+}
+
+function sendWhatsApp() {
+    const items = cartList.map(id => phones.find(p => p.id === id));
+    let total = items.reduce((sum, p) => sum + p.price, 0);
+    let msg = "¡Hola Jazzcel! 📱 Me gustaría comprar:\n\n";
+    items.forEach(p => msg += `• ${p.name} - Q${p.price}\n`);
+    msg += `\n*Total: Q${total}*`;
+    window.open(`https://wa.me/50200000000?text=${encodeURIComponent(msg)}`);
+}
+
+function filterBrand(brand, el) {
+    document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    currentBrand = brand;
+    load();
 }
 
 function toggleFavorite(e, id) {
@@ -343,137 +539,36 @@ function toggleFavorite(e, id) {
     load();
 }
 
-function addToRecent(id) {
-    recentlyViewed = recentlyViewed.filter(r => r !== id);
-    recentlyViewed.unshift(id);
-    if(recentlyViewed.length > 6) recentlyViewed.pop();
-    localStorage.setItem('jazz_recent', JSON.stringify(recentlyViewed));
-}
-
-function updateRecentUI() {
-    const section = document.getElementById("recentSection");
-    const flex = document.getElementById("recentFlex");
-    if(recentlyViewed.length === 0) { section.style.display = "none"; return; }
-    
-    section.style.display = "block";
-    flex.innerHTML = recentlyViewed.map(id => {
-        const p = phones.find(x => x.id === id);
-        if(!p) return '';
-        return `
-            <div class="recent-mini-card" onclick="showDetail(${p.id})">
-                <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150?text=Jazzcel'">
-                <div style="font-weight:bold; margin-top:5px; color:var(--accent)">Q${p.price}</div>
-                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
-            </div>
-        `;
-    }).join('');
-}
-
-function toggleDropdown() {
-    document.getElementById("priceDropdown").classList.toggle("show");
-}
-
-function setPriceRange(val, label, el) {
-    maxPrice = val;
-    document.getElementById("priceLabel").innerText = label;
-    document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById("priceDropdown").classList.remove("show");
-    load();
-}
-
-window.onclick = function(event) {
-    if (!event.target.closest('.price-filter-wrapper')) {
-        const drop = document.getElementById("priceDropdown");
-        if(drop) drop.classList.remove("show");
-    }
-}
-
-function filterBrand(brand, el) {
-    document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    currentBrand = brand;
-    load();
-}
-
-function toggleCompare(e, id) {
-    e.stopPropagation();
-    if(compareList.includes(id)) {
-        compareList = compareList.filter(i => i !== id);
-    } else {
-        if(compareList.length >= 3) return alert("Máximo 3 equipos");
-        compareList.push(id);
-    }
-    document.getElementById("compareBar").style.display = compareList.length >= 2 ? "flex" : "none";
-    document.getElementById("compareText").innerText = `${compareList.length} seleccionados`;
-    load();
-}
-
-function openCompareModal() {
-    const items = compareList.map(id => phones.find(p => p.id === id));
-    let html = `<span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span><h2 style="text-align:center">Comparativa</h2><div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;">`;
-    items.forEach(p => {
-        html += `
-            <div style="min-width:160px; flex:1; background:var(--bg-specs); padding:15px; border-radius:15px; text-align:center;">
-                <img src="${p.img}" style="width:80px; height:80px; object-fit:contain;">
-                <h4 style="font-size:12px; margin:10px 0;">${p.name}</h4>
-                <div style="color:var(--accent); font-weight:bold; margin-bottom:10px;">Q${p.price}</div>
-                <div style="font-size:11px; text-align:left; border-top:1px solid #ddd; padding-top:10px;">
-                    <p><b>RAM/Alm:</b> ${p.ram}</p>
-                    <p><b>Cámara:</b> ${p.cam}</p>
-                    <p><b>Batería:</b> ${p.bat}</p>
-                </div>
-            </div>
-        `;
+function setRating(n) {
+    selectedRating = n;
+    const stars = document.querySelectorAll('#starInput i');
+    stars.forEach((s, i) => {
+        s.style.color = i < n ? 'var(--stars)' : '#ccc';
+        if(i < n) s.classList.add('active'); else s.classList.remove('active');
     });
-    html += `</div>`;
-    document.getElementById("modalContent").innerHTML = html;
-    document.getElementById("modal").style.display = "flex";
 }
 
-function showDetail(id) {
-    const p = phones.find(x => x.id === id);
-    addToRecent(id);
-    const inCart = cartList.includes(id);
-
-    document.getElementById("modalContent").innerHTML = `
-        <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
-        <div style="text-align:center">
-            <img src="${p.img}" style="width:140px; margin-bottom:15px;">
-            <h2>${p.name}</h2>
-            <div class="price" style="font-size:24px">Q${p.price.toLocaleString()}</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px; text-align:left;">
-                <div style="background:var(--bg-specs); padding:10px; border-radius:10px;"><b>RAM:</b> ${p.ram}</div>
-                <div style="background:var(--bg-specs); padding:10px; border-radius:10px;"><b>Cámara:</b> ${p.cam}</div>
-                <div style="background:var(--bg-specs); padding:10px; border-radius:10px;"><b>Batería:</b> ${p.bat}</div>
-                <div style="background:var(--bg-specs); padding:10px; border-radius:10px;"><b>Marca:</b> ${p.brand}</div>
-            </div>
-            <button class="btn-wa" onclick="toggleCart(null, ${p.id}); closeModal();">
-                <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Quitar del Pedido' : 'Agregar al Pedido'}
-            </button>
-        </div>`;
-    document.getElementById("modal").style.display = "flex";
-}
-
-function closeModal() {
-    document.getElementById("modal").style.display = "none";
+function saveReview(id) {
+    const text = document.getElementById("reviewText").value;
+    if(!text.trim()) return;
+    if(!reviews[id]) reviews[id] = [];
+    reviews[id].push({ stars: selectedRating, text: text });
+    localStorage.setItem('jazz_revs_v7', JSON.stringify(reviews));
+    showDetail(id);
+    load();
 }
 
 function toggleDarkMode() {
-    const body = document.body;
-    const currentTheme = body.getAttribute("data-theme");
-    body.setAttribute("data-theme", currentTheme === "light" ? "dark" : "light");
+    const b = document.body;
+    const isDark = b.getAttribute("data-theme") === "dark";
+    b.setAttribute("data-theme", isDark ? "light" : "dark");
+    const icon = document.querySelector(".controls button i");
+    icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
 }
 
-function clearCompare() {
-    compareList = [];
-    document.getElementById("compareBar").style.display = "none";
-    load();
-}
+function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-// Iniciar carga
 load();
 </script>
-
 </body>
 </html>

@@ -284,7 +284,6 @@
     <div class="category" onclick="filterBrand('Apple', this)"><i class="fab fa-apple"></i> Apple</div>
     <div class="category" onclick="filterBrand('Básicos', this)"><i class="fas fa-keyboard"></i> Básicos</div>
     <div class="category" onclick="filterBrand('Accesorios', this)"><i class="fas fa-headphones"></i> Accesorios</div>
-    <div class="category" onclick="filterBrand('Repuestos', this)"><i class="fas fa-tools"></i> Repuestos</div>
 </div>
 
 <div class="main">
@@ -359,50 +358,43 @@ const phones = [
 
     // --- ACCESORIOS 1HORA (BASE DE DATOS COMPLETA) ---
     // AUDIFONOS
-    {id:1067890, name:"Audífono Metálico AUT111 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT111_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
-    {id:1067891, name:"Audífono Metálico AUT117 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT117_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
-    {id:1067895, name:"Audífonos 3.5mm AUT122 (Negro)", brand:"Accesorios", price:20, img:"https://1hora.com/cdn/shop/files/AUT122_Negro.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
-    {id:1067894, name:"Audífonos 3.5mm AUT122 (Blanco)", brand:"Accesorios", price:20, img:"https://1hora.com/cdn/shop/files/AUT122_Blanco.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
-    {id:1068143, name:"Audífono TWS AUT114B (Blanco)", brand:"Accesorios", price:125, img:"https://1hora.com/cdn/shop/files/AUT114_Blanco.jpg", ram:"BT 5.3", cam:"HiFi", bat:"20h"},
-    {id:1069234, name:"Audífonos Tipo C AUT124 (Blanco)", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/AUT124_Blanco.jpg", ram:"USB-C", cam:"Control", bat:"1.2m"},
-    {id:1069191, name:"Diadema Bluetooth AUT250 (Negro)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/AUT250_Negro.jpg", ram:"Wireless", cam:"Plegable", bat:"15h"},
-    {id:1068583, name:"Audífono TWS AUT207 (Negro)", brand:"Accesorios", price:115, img:"https://1hora.com/cdn/shop/files/AUT207_Negro.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
-    {id:1069190, name:"Audífono TWS AUT207 (Blanco)", brand:"Accesorios", price:115, img:"https://1hora.com/cdn/shop/files/AUT207_Blanco.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
-    {id:1069187, name:"Audífono AUT123 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT123_Negro.jpg", ram:"3.5mm", cam:"Bass", bat:"1.2m"},
+{id:1067890, name:"Audífono Metálico AUT111 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT111_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
+{id:1067891, name:"Audífono Metálico AUT117 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT117_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
+{id:1067895, name:"Audífonos 3.5mm AUT122 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT122_Negro.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
+{id:1067894, name:"Audífonos 3.5mm AUT122 (Blanco)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT122_Blanco.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
+{id:1068143, name:"Audífono TWS AUT114B (Blanco)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT114_Blanco.jpg", ram:"BT 5.3", cam:"HiFi", bat:"20h"},
+{id:1069234, name:"Audífonos Tipo C AUT124 (Blanco)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT124_Blanco.jpg", ram:"USB-C", cam:"Control", bat:"1.2m"},
+{id:1069191, name:"Diadema Bluetooth AUT250 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT250_Negro.jpg", ram:"Wireless", cam:"Plegable", bat:"15h"},
+{id:1068583, name:"Audífono TWS AUT207 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT207_Negro.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
+{id:1069190, name:"Audífono TWS AUT207 (Blanco)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT207_Blanco.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
+{id:1069187, name:"Audífono AUT123 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/AUT123_Negro.jpg", ram:"3.5mm", cam:"Bass", bat:"1.2m"},
+
+// BOCINAS
+{id:1068473, name:"Bocina BOC062 (Rojo)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC062_Rojo.jpg", ram:"Portable", cam:"5W", bat:"5h"},
+{id:1068472, name:"Bocina BOC062 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC062_Negro.jpg", ram:"Portable", cam:"5W", bat:"5h"},
+{id:1067897, name:"Bocina BOC060 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC060_Negro.jpg", ram:"Stereo", cam:"10W", bat:"6h"},
+{id:1069212, name:"Bocina LED BOC242 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC242_Negro.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
+{id:1069213, name:"Bocina LED BOC242 (Gris)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC242_Gris.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
+{id:1069217, name:"Bocina 20W BOC250", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC250_Negro.jpg", ram:"Pro", cam:"20W", bat:"8h"},
+{id:1068574, name:"Bocina BOC051 (Azul)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/BOC051_Azul.jpg", ram:"Mini", cam:"3W", bat:"3h"},
+
+// CABLES
+{id:1067922, name:"Cable iPhone 2M CAB247", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB247_Blanco.jpg", ram:"Lightning", cam:"2.1A", bat:"2m"},
+{id:1068460, name:"Cable Magnético 3 en 1 CAB253R", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB253_Rojo.jpg", ram:"Universal", cam:"Led", bat:"1m"},
+{id:1067927, name:"Cable Tipo C a C 1M CAB252", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB252_Blanco.jpg", ram:"Fast Charge", cam:"60W", bat:"1m"},
+{id:1069184, name:"Cable Tipo C 2M CAB246 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB246_Negro.jpg", ram:"Largo", cam:"2.4A", bat:"2m"},
+{id:1067916, name:"Cable V8 1M CAB234", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB234_Blanco.jpg", ram:"Micro USB", cam:"2.1A", bat:"1m"},
+{id:1069202, name:"Cable Tipo C Metal CAB260", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/CAB260_Plata.jpg", ram:"Reforzado", cam:"3A", bat:"1m"},
+
+// CARGADORES Y POWERBANKS
+{id:1067951, name:"Cargador V8 2.4A GAR124", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR124_Negro.jpg", ram:"Turbo", cam:"Micro USB", bat:"Pared"},
+{id:1067931, name:"Cargador PD 20W GAR152", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR152_Blanco.jpg", ram:"PD 20W", cam:"C-Port", bat:"Turbo"},
+{id:1067950, name:"Cargador PD 20W GAR163", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR163_Blanco.jpg", ram:"PD 20W", cam:"USB-C", bat:"Wall"},
+{id:1068466, name:"Powerbank 10000mAh GAR094 (Rojo)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR094_Rojo.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
+{id:1068467, name:"Powerbank 10000mAh GAR094 (Negro)", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR094_Negro.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
+{id:1068469, name:"Powerbank 4 en 1 20000mAh GAR159N", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR159N.jpg", ram:"20,000", cam:"4 Cables", bat:"Larga"},
+{id:1068471, name:"Powerbank Magnética 5000mAh GAR276", brand:"Accesorios", price:"Consultar Precio", img:"https://1hora.com/cdn/shop/files/GAR276.jpg", ram:"Magsafe", cam:"Qi", bat:"Slim"},
     
-    // BOCINAS
-    {id:1068473, name:"Bocina BOC062 (Rojo)", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/BOC062_Rojo.jpg", ram:"Portable", cam:"5W", bat:"5h"},
-    {id:1068472, name:"Bocina BOC062 (Negro)", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/BOC062_Negro.jpg", ram:"Portable", cam:"5W", bat:"5h"},
-    {id:1067897, name:"Bocina BOC060 (Negro)", brand:"Accesorios", price:95, img:"https://1hora.com/cdn/shop/files/BOC060_Negro.jpg", ram:"Stereo", cam:"10W", bat:"6h"},
-    {id:1069212, name:"Bocina LED BOC242 (Negro)", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/BOC242_Negro.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
-    {id:1069213, name:"Bocina LED BOC242 (Gris)", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/BOC242_Gris.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
-    {id:1069217, name:"Bocina 20W BOC250", brand:"Accesorios", price:225, img:"https://1hora.com/cdn/shop/files/BOC250_Negro.jpg", ram:"Pro", cam:"20W", bat:"8h"},
-    {id:1068574, name:"Bocina BOC051 (Azul)", brand:"Accesorios", price:75, img:"https://1hora.com/cdn/shop/files/BOC051_Azul.jpg", ram:"Mini", cam:"3W", bat:"3h"},
-
-    // CABLES
-    {id:1067922, name:"Cable iPhone 2M CAB247", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/CAB247_Blanco.jpg", ram:"Lightning", cam:"2.1A", bat:"2m"},
-    {id:1068460, name:"Cable Magnético 3 en 1 CAB253R", brand:"Accesorios", price:45, img:"https://1hora.com/cdn/shop/files/CAB253_Rojo.jpg", ram:"Universal", cam:"Led", bat:"1m"},
-    {id:1067927, name:"Cable Tipo C a C 1M CAB252", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/CAB252_Blanco.jpg", ram:"Fast Charge", cam:"60W", bat:"1m"},
-    {id:1069184, name:"Cable Tipo C 2M CAB246 (Negro)", brand:"Accesorios", price:30, img:"https://1hora.com/cdn/shop/files/CAB246_Negro.jpg", ram:"Largo", cam:"2.4A", bat:"2m"},
-    {id:1067916, name:"Cable V8 1M CAB234", brand:"Accesorios", price:15, img:"https://1hora.com/cdn/shop/files/CAB234_Blanco.jpg", ram:"Micro USB", cam:"2.1A", bat:"1m"},
-    {id:1069202, name:"Cable Tipo C Metal CAB260", brand:"Accesorios", price:40, img:"https://1hora.com/cdn/shop/files/CAB260_Plata.jpg", ram:"Reforzado", cam:"3A", bat:"1m"},
-
-    // CARGADORES Y POWERBANKS
-    {id:1067951, name:"Cargador V8 2.4A GAR124", brand:"Accesorios", price:40, img:"https://1hora.com/cdn/shop/files/GAR124_Negro.jpg", ram:"Turbo", cam:"Micro USB", bat:"Pared"},
-    {id:1067931, name:"Cargador PD 20W GAR152", brand:"Accesorios", price:65, img:"https://1hora.com/cdn/shop/files/GAR152_Blanco.jpg", ram:"PD 20W", cam:"C-Port", bat:"Turbo"},
-    {id:1067950, name:"Cargador PD 20W GAR163", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/GAR163_Blanco.jpg", ram:"PD 20W", cam:"USB-C", bat:"Wall"},
-    {id:1068466, name:"Powerbank 10000mAh GAR094 (Rojo)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/GAR094_Rojo.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
-    {id:1068467, name:"Powerbank 10000mAh GAR094 (Negro)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/GAR094_Negro.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
-    {id:1068469, name:"Powerbank 4 en 1 20000mAh GAR159N", brand:"Accesorios", price:245, img:"https://1hora.com/cdn/shop/files/GAR159N.jpg", ram:"20,000", cam:"4 Cables", bat:"Larga"},
-    {id:1068471, name:"Powerbank Magnética 5000mAh GAR276", brand:"Accesorios", price:165, img:"https://1hora.com/cdn/shop/files/GAR276.jpg", ram:"Magsafe", cam:"Qi", bat:"Slim"},
-
-    // VARIOS Y REPUESTOS
-    {id:1067968, name:"Soporte Celular PJ033", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/PJ033.jpg", ram:"Universal", cam:"Escritorio", bat:"Ajustable"},
-    {id:1069225, name:"Mouse Inalámbrico RAT001", brand:"Accesorios", price:55, img:"https://1hora.com/cdn/shop/files/RAT001.jpg", ram:"2.4GHz", cam:"PC/Laptop", bat:"AAA"},
-    {id:1069226, name:"Regleta 10 Enchufes MCT002", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/MCT002.jpg", ram:"Protección", cam:"10 tomas", bat:"2m"},
-    {id:1068492, name:"Vidrio Templado Samsung A73", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"},
-    {id:1068493, name:"Vidrio Templado Moto G60", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"},
-    {id:1068494, name:"Vidrio Templado Samsung A70", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"}
 ];
 
 let currentBrand = "Todos";

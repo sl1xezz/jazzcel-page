@@ -165,6 +165,14 @@
             font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn-cart-add.active { background: var(--success); color: white; border-color: var(--success); }
+        
+        /* NUEVO: BOTÓN COMPARAR */
+        .btn-compare {
+            background: var(--bg-specs); border: 1px solid var(--border);
+            width: 45px; border-radius: 12px; color: var(--text-main);
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-compare.active { background: var(--accent); color: white; border-color: var(--accent); }
 
         /* MODAL */
         .modal {
@@ -191,7 +199,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
 
-        /* CARRITO FLOTANTE */
+        /* CARRITO Y COMPARADOR FLOTANTE */
         .cart-float {
             position: fixed;
             bottom: 30px;
@@ -212,53 +220,38 @@
         }
         .cart-float:hover { transform: scale(1.1); }
         .cart-count {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #ff4757;
-            color: white;
-            font-size: 14px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            border: 2px solid white;
+            position: absolute; top: 0; right: 0; background: #ff4757; color: white;
+            font-size: 14px; width: 25px; height: 25px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: bold; border: 2px solid white;
         }
 
-        /* --- NUEVA SECCIÓN RESPONSIVE --- */
+        /* BARRA DE COMPARACIÓN */
+        .compare-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: white; padding: 15px 30px;
+            border-radius: 50px; display: none; align-items: center; gap: 20px;
+            z-index: 1400; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             body { flex-direction: column; overflow-x: hidden; }
-            
             .banner { font-size: 20px; padding: 10px 0; border-radius: 0 0 15px 15px; top: 0; left: 0; right: 0; }
-            
-            .sidebar { 
-                width: auto; height: auto; margin: 60px 10px 0; padding: 10px; 
-                flex-direction: row; overflow-x: auto; border-radius: 15px;
-                scrollbar-width: none; /* Firefox */
-            }
-            .sidebar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+            .sidebar { width: auto; height: auto; margin: 60px 10px 0; padding: 10px; flex-direction: row; overflow-x: auto; border-radius: 15px; }
+            .sidebar::-webkit-scrollbar { display: none; }
             .category { white-space: nowrap; padding: 10px 15px; font-size: 14px; }
-            
             .controls { position: relative; top: 10px; left: 0; right: 0; padding: 0 15px; width: calc(100% - 30px); }
-            
             .main { padding: 20px 15px 100px; overflow-y: visible; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            
             .card { min-height: 320px; padding: 12px; }
             .card img { height: 120px; }
             .price { font-size: 18px; }
             .card h3 { font-size: 14px; }
-            
             .modal-content { padding: 20px; border-radius: 20px 20px 0 0; position: fixed; bottom: 0; max-height: 85vh; }
             .modal { align-items: flex-end; padding: 0; }
-            
-            .cart-float { width: 60px; height: 60px; bottom: 20px; right: 20px; }
+            .compare-bar { width: 90%; font-size: 14px; padding: 12px; }
         }
-        /* --- FIN SECCIÓN RESPONSIVE --- */
-
     </style>
 </head>
 <body data-theme="light">
@@ -268,6 +261,12 @@
 <div class="cart-float" id="cartFloat" onclick="openCartModal()">
     <i class="fas fa-shopping-cart"></i>
     <div class="cart-count" id="cartCount">0</div>
+</div>
+
+<div class="compare-bar" id="compareBar">
+    <span id="compareText">2 productos seleccionados</span>
+    <button onclick="openCompareModal()" style="background:white; color:var(--accent); border:none; padding:8px 15px; border-radius:20px; font-weight:bold; cursor:pointer;">Comparar Ahora</button>
+    <button onclick="compareList=[] ; load()" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
 </div>
 
 <div class="controls">
@@ -300,7 +299,7 @@
 </div>
 
 <script>
-// LA MISMA BASE DE DATOS Y LÓGICA QUE TENÍAS (COMPLETA)
+// BASE DE DATOS COMPLETA
 const phones = [
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -366,6 +365,7 @@ const phones = [
 
 let currentBrand = "Todos";
 let cartList = [];
+let compareList = []; // NUEVA
 let reviews = JSON.parse(localStorage.getItem('jazz_revs_v7')) || {};
 let favorites = JSON.parse(localStorage.getItem('jazz_favs')) || [];
 let selectedRating = 5;
@@ -388,6 +388,7 @@ function load() {
         const avg = pRev.length ? Math.round(pRev.reduce((a,b)=>a+b.stars,0)/pRev.length) : 5;
         const isFav = favorites.includes(p.id);
         const inCart = cartList.includes(p.id);
+        const inCompare = compareList.includes(p.id);
 
         return `
             <div class="card" onclick="showDetail(${p.id})">
@@ -405,19 +406,75 @@ function load() {
                         <button class="btn-cart-add ${inCart ? 'active' : ''}" onclick="toggleCart(event, ${p.id})">
                             <i class="fas ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i> ${inCart ? 'Listo' : 'Pedir'}
                         </button>
+                        <button class="btn-compare ${inCompare ? 'active' : ''}" onclick="toggleCompare(event, ${p.id})">
+                            <i class="fas fa-columns"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         `;
     }).join('');
     updateCartUI();
+    updateCompareUI();
 }
 
+// LOGICA DE COMPARACIÓN
+function toggleCompare(e, id) {
+    if(e) e.stopPropagation();
+    if(compareList.includes(id)) {
+        compareList = compareList.filter(i => i !== id);
+    } else {
+        if(compareList.length >= 2) compareList.shift();
+        compareList.push(id);
+    }
+    load();
+}
+
+function updateCompareUI() {
+    const bar = document.getElementById("compareBar");
+    if(compareList.length > 0) {
+        bar.style.display = "flex";
+        document.getElementById("compareText").innerText = `${compareList.length} equipo${compareList.length > 1 ? 's' : ''} para comparar`;
+    } else {
+        bar.style.display = "none";
+    }
+}
+
+function openCompareModal() {
+    const p1 = phones.find(x => x.id === compareList[0]);
+    const p2 = phones.find(x => x.id === compareList[1]);
+    
+    if(!p2) { alert("Selecciona otro equipo para comparar"); return; }
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <h2 style="text-align:center; margin-bottom:30px;">Comparativa</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div style="text-align:center">
+                <img src="${p1.img}" style="height:100px; object-fit:contain;">
+                <h4 style="margin:10px 0;">${p1.name}</h4>
+            </div>
+            <div style="text-align:center">
+                <img src="${p2.img}" style="height:100px; object-fit:contain;">
+                <h4 style="margin:10px 0;">${p2.name}</h4>
+            </div>
+        </div>
+        <table style="width:100%; margin-top:20px; border-collapse:collapse; font-size:14px;">
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Precio</td><td style="color:var(--accent)">Q${p1.price}</td><td style="color:var(--accent)">Q${p2.price}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">RAM</td><td>${p1.ram}</td><td>${p2.ram}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Cámara</td><td>${p1.cam}</td><td>${p2.cam}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Batería</td><td>${p1.bat}</td><td>${p2.bat}</td></tr>
+            <tr><td style="padding:10px; font-weight:bold;">Marca</td><td>${p1.brand}</td><td>${p2.brand}</td></tr>
+        </table>
+    `;
+    document.getElementById("modal").style.display = "flex";
+}
+
+// RESTO DE FUNCIONES ORIGINALES
 function showDetail(id) {
     const p = phones.find(x => x.id === id);
     const inCart = cartList.includes(id);
     const pRev = reviews[id] || [];
-
     let reviewsHtml = pRev.length > 0 ? pRev.map(r => `
         <div style="background:var(--bg-specs); padding:10px; border-radius:10px; margin-bottom:10px; font-size:13px;">
             <div style="color:var(--stars); margin-bottom:3px;">${'★'.repeat(r.stars)}</div>
@@ -431,27 +488,24 @@ function showDetail(id) {
             <img src="${p.img}" style="width:180px; margin-bottom:20px;">
             <h2 style="margin:0; text-align:center;">${p.name}</h2>
             <div class="price" style="font-size:28px">Q${p.price.toLocaleString()}</div>
-            
             <div style="width:100%; display:grid; grid-template-columns: 1fr 1fr; gap:10px; text-align:left; background:var(--bg-specs); padding:20px; border-radius:20px; margin:20px 0; font-size:14px;">
                 <div><b>RAM:</b> ${p.ram}</div>
                 <div><b>Cámara:</b> ${p.cam}</div>
                 <div><b>Batería:</b> ${p.bat}</div>
                 <div><b>Marca:</b> ${p.brand}</div>
             </div>
-
             <button class="btn-cart-add ${inCart ? 'active' : ''}" style="width:100%; padding:18px; font-size:16px;" onclick="toggleCart(null, ${p.id}); closeModal();">
                 <i class="fas ${inCart ? 'fa-trash' : 'fa-cart-plus'}"></i> ${inCart ? 'Eliminar del pedido' : 'Agregar al pedido'}
             </button>
         </div>
-
         <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
-            <h3 style="margin-bottom:15px;">Reseñas de clientes</h3>
+            <h3 style="margin-bottom:15px;">Reseñas</h3>
             <div style="background:var(--bg-specs); padding:20px; border-radius:20px; margin-bottom:20px;">
                 <div style="color:#ccc; font-size:24px; margin-bottom:15px;" id="starInput">
                     ${[1,2,3,4,5].map(n => `<i class="fas fa-star ${n<=selectedRating?'active':''}" style="cursor:pointer; color:${n<=selectedRating?'var(--stars)':'#ccc'}" onclick="setRating(${n})"></i>`).join('')}
                 </div>
-                <textarea id="reviewText" placeholder="Cuéntanos tu experiencia..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:15px; font-family:inherit; margin-bottom:10px; box-sizing:border-box; background:var(--bg-card); color:var(--text-main);"></textarea>
-                <button onclick="saveReview(${p.id})" style="background:var(--accent); color:white; border:none; padding:12px 20px; border-radius:10px; cursor:pointer; width:100%; font-weight:bold;">Publicar reseña</button>
+                <textarea id="reviewText" placeholder="Tu opinión..." style="width:100%; border:1px solid var(--border); border-radius:12px; padding:15px; margin-bottom:10px; background:var(--bg-card); color:var(--text-main);"></textarea>
+                <button onclick="saveReview(${p.id})" style="background:var(--accent); color:white; border:none; padding:12px; border-radius:10px; cursor:pointer; width:100%; font-weight:bold;">Publicar</button>
             </div>
             <div id="reviewsList">${reviewsHtml}</div>
         </div>
@@ -461,11 +515,8 @@ function showDetail(id) {
 
 function toggleCart(e, id) {
     if(e) e.stopPropagation();
-    if(cartList.includes(id)) {
-        cartList = cartList.filter(i => i !== id);
-    } else {
-        cartList.push(id);
-    }
+    if(cartList.includes(id)) cartList = cartList.filter(i => i !== id);
+    else cartList.push(id);
     load();
 }
 
@@ -478,36 +529,11 @@ function updateCartUI() {
 function openCartModal() {
     const items = cartList.map(id => phones.find(p => p.id === id));
     let total = items.reduce((sum, p) => sum + p.price, 0);
-    
-    let html = `
-        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
-        <h2 style="margin-bottom:25px;">Tu Pedido Actual</h2>
-        <div style="max-height:350px; overflow-y:auto;">
-    `;
-    
+    let html = `<span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span><h2 style="margin-bottom:25px;">Tu Pedido</h2><div style="max-height:350px; overflow-y:auto;">`;
     items.forEach(p => {
-        html += `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border);">
-                <div>
-                    <div style="font-weight:bold;">${p.name}</div>
-                    <div style="color:var(--accent); font-weight:700;">Q${p.price.toLocaleString()}</div>
-                </div>
-                <button onclick="toggleCart(null, ${p.id}); openCartModal();" style="background:none; border:none; color:#ff4757; cursor:pointer; font-size:18px;"><i class="fas fa-trash-alt"></i></button>
-            </div>
-        `;
+        html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid var(--border);"><div><div style="font-weight:bold;">${p.name}</div><div style="color:var(--accent); font-weight:700;">Q${p.price.toLocaleString()}</div></div><button onclick="toggleCart(null, ${p.id}); openCartModal();" style="background:none; border:none; color:#ff4757; cursor:pointer; font-size:18px;"><i class="fas fa-trash-alt"></i></button></div>`;
     });
-
-    html += `
-        </div>
-        <div style="margin-top:25px; text-align:right;">
-            <div style="font-size:14px; opacity:0.7;">Total Estimado</div>
-            <div style="font-size:28px; font-weight:900; color:var(--accent);">Q${total.toLocaleString()}</div>
-        </div>
-        <button onclick="sendWhatsApp()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; font-size:16px; font-weight:bold; margin-top:25px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
-            <i class="fab fa-whatsapp" style="font-size:22px;"></i> Confirmar por WhatsApp
-        </button>
-    `;
-    
+    html += `</div><div style="margin-top:25px; text-align:right;"><div style="font-size:14px; opacity:0.7;">Total Estimado</div><div style="font-size:28px; font-weight:900; color:var(--accent);">Q${total.toLocaleString()}</div></div><button onclick="sendWhatsApp()" style="width:100%; background:var(--success); color:white; border:none; padding:18px; border-radius:15px; font-size:16px; font-weight:bold; margin-top:25px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;"><i class="fab fa-whatsapp" style="font-size:22px;"></i> Confirmar por WhatsApp</button>`;
     document.getElementById("modalContent").innerHTML = html;
     document.getElementById("modal").style.display = "flex";
 }
@@ -530,11 +556,8 @@ function filterBrand(brand, el) {
 
 function toggleFavorite(e, id) {
     e.stopPropagation();
-    if(favorites.includes(id)) {
-        favorites = favorites.filter(f => f !== id);
-    } else {
-        favorites.push(id);
-    }
+    if(favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+    else favorites.push(id);
     localStorage.setItem('jazz_favs', JSON.stringify(favorites));
     load();
 }
@@ -542,10 +565,7 @@ function toggleFavorite(e, id) {
 function setRating(n) {
     selectedRating = n;
     const stars = document.querySelectorAll('#starInput i');
-    stars.forEach((s, i) => {
-        s.style.color = i < n ? 'var(--stars)' : '#ccc';
-        if(i < n) s.classList.add('active'); else s.classList.remove('active');
-    });
+    stars.forEach((s, i) => { s.style.color = i < n ? 'var(--stars)' : '#ccc'; });
 }
 
 function saveReview(id) {
@@ -562,8 +582,7 @@ function toggleDarkMode() {
     const b = document.body;
     const isDark = b.getAttribute("data-theme") === "dark";
     b.setAttribute("data-theme", isDark ? "light" : "dark");
-    const icon = document.querySelector(".controls button i");
-    icon.className = isDark ? "fas fa-moon" : "fas fa-sun";
+    document.querySelector(".controls button i").className = isDark ? "fas fa-moon" : "fas fa-sun";
 }
 
 function closeModal() { document.getElementById("modal").style.display = "none"; }

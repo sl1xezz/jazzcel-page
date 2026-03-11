@@ -166,7 +166,6 @@
         }
         .btn-cart-add.active { background: var(--success); color: white; border-color: var(--success); }
         
-        /* NUEVO: BOTÓN COMPARAR */
         .btn-compare {
             background: var(--bg-specs); border: 1px solid var(--border);
             width: 45px; border-radius: 12px; color: var(--text-main);
@@ -234,64 +233,23 @@
             z-index: 1400; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* RESPONSIVE - ARREGLOS DE DESPLAZAMIENTO Y MODAL */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            body { 
-                flex-direction: column; 
-                overflow-y: auto; /* Permite scroll en el body */
-                height: auto; 
-            }
+            body { flex-direction: column; overflow-y: auto; height: auto; }
             .banner { font-size: 20px; padding: 10px 0; border-radius: 0 0 15px 15px; top: 0; left: 0; right: 0; }
-            
-            .sidebar { 
-                width: auto; 
-                height: auto; 
-                margin: 70px 10px 10px; 
-                padding: 10px; 
-                flex-direction: row; 
-                overflow-x: auto; 
-                border-radius: 15px;
-                flex-shrink: 0;
-            }
+            .sidebar { width: auto; height: auto; margin: 70px 10px 10px; padding: 10px; flex-direction: row; overflow-x: auto; border-radius: 15px; flex-shrink: 0; }
             .sidebar::-webkit-scrollbar { display: none; }
             .category { white-space: nowrap; padding: 8px 15px; font-size: 13px; }
-            
-            .controls { 
-                position: sticky; /* Se mantiene arriba al hacer scroll */
-                top: 60px; 
-                left: 0; 
-                right: 0; 
-                padding: 10px 15px; 
-                width: calc(100% - 30px); 
-                background: var(--bg-body);
-                margin: 0;
-                z-index: 1050;
-            }
-            
-            .main { 
-                padding: 10px 15px 100px; 
-                overflow-y: visible; /* Importante para que el scroll del body funcione */
-                flex: none;
-            }
-            
+            .controls { position: sticky; top: 60px; left: 0; right: 0; padding: 10px 15px; width: calc(100% - 30px); background: var(--bg-body); margin: 0; z-index: 1050; }
+            .main { padding: 10px 15px 100px; overflow-y: visible; flex: none; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .card { min-height: 280px; padding: 10px; }
             .card img { height: 100px; }
             .price { font-size: 16px; }
             .card h3 { font-size: 13px; }
-            
-            /* Ajuste de Modal para que no se vea "gigante" */
             .modal { align-items: flex-end; padding: 0; }
-            .modal-content { 
-                padding: 25px 20px; 
-                border-radius: 25px 25px 0 0; 
-                max-width: 100%;
-                width: 100%;
-                margin: 0;
-                box-sizing: border-box;
-            }
-            .modal-content img { width: 120px !important; } /* Tamaño controlado en móvil */
-            
+            .modal-content { padding: 25px 20px; border-radius: 25px 25px 0 0; max-width: 100%; width: 100%; margin: 0; box-sizing: border-box; }
+            .modal-content img { width: 120px !important; }
             .compare-bar { width: 85%; font-size: 12px; padding: 10px 20px; bottom: 15px; }
         }
     </style>
@@ -342,6 +300,7 @@
 
 <script>
 const phones = [
+    // --- TUS EQUIPOS ORIGINALES (MANTENIDOS) ---
     {id:1, name:"Honor Magic 7 Lite 256GB", brand:"Honor", price:2365, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-magic6-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"5100mAh"},
     {id:2, name:"Honor 400 Lite 256GB", brand:"Honor", price:1899, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-90-lite-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
     {id:3, name:"Honor X8b 512GB", brand:"Honor", price:1999, img:"https://fdn2.gsmarena.com/vv/pics/honor/honor-x8b-1.jpg", ram:"8GB", cam:"108MP", bat:"4500mAh"},
@@ -396,12 +355,54 @@ const phones = [
     {id:52, name:"SKY F3G", brand:"Básicos", price:89, img:"https://tse2.mm.bing.net/th/id/OIP.uZiDp5Mnbd3Phzdstk4VugAAAA", ram:"32MB", cam:"VGA", bat:"800mAh"},
     {id:53, name:"PCD PG03", brand:"Básicos", price:99, img:"https://pcdlatam.com/wp-content/uploads/2022/02/PG03-2021.png", ram:"32MB", cam:"VGA", bat:"800mAh"},
     {id:54, name:"Nokia 105", brand:"Básicos", price:199, img:"https://tse3.mm.bing.net/th/id/OIP.VJ3vdkIxM5ngvwNKzJ9XfgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"4MB", cam:"N/A", bat:"800mAh"},
-    {id:55, name:"BLU Tank II", brand:"Básicos", price:175, img:"https://tse2.mm.bing.net/th/id/OIP.9bC1PvPQ_yQ4qizcSd19-wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"32MB", cam:"VGA", bat:"1900mAh"},
-    {id:101, name:"Audífonos Bluetooth JBL", brand:"Accesorios", price:350, img:"https://m.media-amazon.com/images/I/516O27mYpLL._AC_SL1200_.jpg", ram:"Sonido Pro", cam:"Micro HD", bat:"20 Horas"},
-    {id:102, name:"Reloj Inteligente Ultra", brand:"Accesorios", price:450, img:"https://m.media-amazon.com/images/I/61S9A-pIdDL._AC_SL1500_.jpg", ram:"Fitness", cam:"Notific.", bat:"7 días"},
-    {id:103, name:"Cargador Tipo C 25W", brand:"Accesorios", price:125, img:"https://m.media-amazon.com/images/I/41m9-Yk-T9L._AC_SL1000_.jpg", ram:"Carga Rápida", cam:"Universal", bat:"N/A"},
-    {id:201, name:"Pantalla Original Samsung A54", brand:"Repuestos", price:950, img:"https://m.media-amazon.com/images/I/61G6X6uM1tL._AC_SL1000_.jpg", ram:"Original", cam:"120Hz", bat:"Nueva"},
-    {id:202, name:"Batería iPhone 13", brand:"Repuestos", price:375, img:"https://m.media-amazon.com/images/I/51Y0yBvV6YL._AC_SL1000_.jpg", ram:"Original", cam:"Ion-Litio", bat:"Nueva"}
+    {id:55, name:"BLU Tank II", brand:"Básicos", price:175, img:"https://tse2.mm.bing.net/th/id/OIP.9bC1PvPQ_yQ4izcSd19-wHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", ram:"32MB", cam:"VGA", bat:"1900mAh"},
+
+    // --- ACCESORIOS 1HORA (BASE DE DATOS COMPLETA) ---
+    // AUDIFONOS
+    {id:1067890, name:"Audífono Metálico AUT111 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT111_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
+    {id:1067891, name:"Audífono Metálico AUT117 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT117_Negro.jpg", ram:"3.5mm", cam:"Mic", bat:"1.2m"},
+    {id:1067895, name:"Audífonos 3.5mm AUT122 (Negro)", brand:"Accesorios", price:20, img:"https://1hora.com/cdn/shop/files/AUT122_Negro.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
+    {id:1067894, name:"Audífonos 3.5mm AUT122 (Blanco)", brand:"Accesorios", price:20, img:"https://1hora.com/cdn/shop/files/AUT122_Blanco.jpg", ram:"3.5mm", cam:"HD", bat:"1.2m"},
+    {id:1068143, name:"Audífono TWS AUT114B (Blanco)", brand:"Accesorios", price:125, img:"https://1hora.com/cdn/shop/files/AUT114_Blanco.jpg", ram:"BT 5.3", cam:"HiFi", bat:"20h"},
+    {id:1069234, name:"Audífonos Tipo C AUT124 (Blanco)", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/AUT124_Blanco.jpg", ram:"USB-C", cam:"Control", bat:"1.2m"},
+    {id:1069191, name:"Diadema Bluetooth AUT250 (Negro)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/AUT250_Negro.jpg", ram:"Wireless", cam:"Plegable", bat:"15h"},
+    {id:1068583, name:"Audífono TWS AUT207 (Negro)", brand:"Accesorios", price:115, img:"https://1hora.com/cdn/shop/files/AUT207_Negro.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
+    {id:1069190, name:"Audífono TWS AUT207 (Blanco)", brand:"Accesorios", price:115, img:"https://1hora.com/cdn/shop/files/AUT207_Blanco.jpg", ram:"BT 5.1", cam:"TWS", bat:"18h"},
+    {id:1069187, name:"Audífono AUT123 (Negro)", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/AUT123_Negro.jpg", ram:"3.5mm", cam:"Bass", bat:"1.2m"},
+    
+    // BOCINAS
+    {id:1068473, name:"Bocina BOC062 (Rojo)", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/BOC062_Rojo.jpg", ram:"Portable", cam:"5W", bat:"5h"},
+    {id:1068472, name:"Bocina BOC062 (Negro)", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/BOC062_Negro.jpg", ram:"Portable", cam:"5W", bat:"5h"},
+    {id:1067897, name:"Bocina BOC060 (Negro)", brand:"Accesorios", price:95, img:"https://1hora.com/cdn/shop/files/BOC060_Negro.jpg", ram:"Stereo", cam:"10W", bat:"6h"},
+    {id:1069212, name:"Bocina LED BOC242 (Negro)", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/BOC242_Negro.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
+    {id:1069213, name:"Bocina LED BOC242 (Gris)", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/BOC242_Gris.jpg", ram:"RGB", cam:"Bass", bat:"4h"},
+    {id:1069217, name:"Bocina 20W BOC250", brand:"Accesorios", price:225, img:"https://1hora.com/cdn/shop/files/BOC250_Negro.jpg", ram:"Pro", cam:"20W", bat:"8h"},
+    {id:1068574, name:"Bocina BOC051 (Azul)", brand:"Accesorios", price:75, img:"https://1hora.com/cdn/shop/files/BOC051_Azul.jpg", ram:"Mini", cam:"3W", bat:"3h"},
+
+    // CABLES
+    {id:1067922, name:"Cable iPhone 2M CAB247", brand:"Accesorios", price:25, img:"https://1hora.com/cdn/shop/files/CAB247_Blanco.jpg", ram:"Lightning", cam:"2.1A", bat:"2m"},
+    {id:1068460, name:"Cable Magnético 3 en 1 CAB253R", brand:"Accesorios", price:45, img:"https://1hora.com/cdn/shop/files/CAB253_Rojo.jpg", ram:"Universal", cam:"Led", bat:"1m"},
+    {id:1067927, name:"Cable Tipo C a C 1M CAB252", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/CAB252_Blanco.jpg", ram:"Fast Charge", cam:"60W", bat:"1m"},
+    {id:1069184, name:"Cable Tipo C 2M CAB246 (Negro)", brand:"Accesorios", price:30, img:"https://1hora.com/cdn/shop/files/CAB246_Negro.jpg", ram:"Largo", cam:"2.4A", bat:"2m"},
+    {id:1067916, name:"Cable V8 1M CAB234", brand:"Accesorios", price:15, img:"https://1hora.com/cdn/shop/files/CAB234_Blanco.jpg", ram:"Micro USB", cam:"2.1A", bat:"1m"},
+    {id:1069202, name:"Cable Tipo C Metal CAB260", brand:"Accesorios", price:40, img:"https://1hora.com/cdn/shop/files/CAB260_Plata.jpg", ram:"Reforzado", cam:"3A", bat:"1m"},
+
+    // CARGADORES Y POWERBANKS
+    {id:1067951, name:"Cargador V8 2.4A GAR124", brand:"Accesorios", price:40, img:"https://1hora.com/cdn/shop/files/GAR124_Negro.jpg", ram:"Turbo", cam:"Micro USB", bat:"Pared"},
+    {id:1067931, name:"Cargador PD 20W GAR152", brand:"Accesorios", price:65, img:"https://1hora.com/cdn/shop/files/GAR152_Blanco.jpg", ram:"PD 20W", cam:"C-Port", bat:"Turbo"},
+    {id:1067950, name:"Cargador PD 20W GAR163", brand:"Accesorios", price:85, img:"https://1hora.com/cdn/shop/files/GAR163_Blanco.jpg", ram:"PD 20W", cam:"USB-C", bat:"Wall"},
+    {id:1068466, name:"Powerbank 10000mAh GAR094 (Rojo)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/GAR094_Rojo.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
+    {id:1068467, name:"Powerbank 10000mAh GAR094 (Negro)", brand:"Accesorios", price:145, img:"https://1hora.com/cdn/shop/files/GAR094_Negro.jpg", ram:"10,000", cam:"LED", bat:"Dual USB"},
+    {id:1068469, name:"Powerbank 4 en 1 20000mAh GAR159N", brand:"Accesorios", price:245, img:"https://1hora.com/cdn/shop/files/GAR159N.jpg", ram:"20,000", cam:"4 Cables", bat:"Larga"},
+    {id:1068471, name:"Powerbank Magnética 5000mAh GAR276", brand:"Accesorios", price:165, img:"https://1hora.com/cdn/shop/files/GAR276.jpg", ram:"Magsafe", cam:"Qi", bat:"Slim"},
+
+    // VARIOS Y REPUESTOS
+    {id:1067968, name:"Soporte Celular PJ033", brand:"Accesorios", price:35, img:"https://1hora.com/cdn/shop/files/PJ033.jpg", ram:"Universal", cam:"Escritorio", bat:"Ajustable"},
+    {id:1069225, name:"Mouse Inalámbrico RAT001", brand:"Accesorios", price:55, img:"https://1hora.com/cdn/shop/files/RAT001.jpg", ram:"2.4GHz", cam:"PC/Laptop", bat:"AAA"},
+    {id:1069226, name:"Regleta 10 Enchufes MCT002", brand:"Accesorios", price:110, img:"https://1hora.com/cdn/shop/files/MCT002.jpg", ram:"Protección", cam:"10 tomas", bat:"2m"},
+    {id:1068492, name:"Vidrio Templado Samsung A73", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"},
+    {id:1068493, name:"Vidrio Templado Moto G60", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"},
+    {id:1068494, name:"Vidrio Templado Samsung A70", brand:"Repuestos", price:25, img:"https://cdn.iconscout.com/icon/premium/png-256-thumb/tempered-glass-1823769-1544322.png", ram:"9H", cam:"Protección", bat:"Nuevo"}
 ];
 
 let currentBrand = "Todos";
@@ -449,7 +450,7 @@ function load() {
             <div class="card" onclick="showDetail(${p.id})">
                 <i class="fas fa-heart" style="position:absolute; top:20px; right:20px; font-size:20px; color:${isFav ? 'var(--heart)' : '#ccc'}; z-index:5;" onclick="toggleFavorite(event, ${p.id})"></i>
                 <div>
-                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/200?text=Imagen+No+Disponible'">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/200?text=JAZZCEL'">
                     <div style="color:var(--stars); font-size:12px; margin-bottom:5px;">
                         ${'★'.repeat(avg)}${'☆'.repeat(5-avg)} <span style="font-size:10px; opacity:0.6; color:var(--text-main)">(${pRev.length})</span>
                     </div>
@@ -473,6 +474,21 @@ function load() {
     updateCompareUI();
 }
 
+function toggleFavorite(e, id) {
+    e.stopPropagation();
+    if(favorites.includes(id)) favorites = favorites.filter(i => i !== id);
+    else favorites.push(id);
+    localStorage.setItem('jazz_favs', JSON.stringify(favorites));
+    load();
+}
+
+function toggleCart(e, id) {
+    if(e) e.stopPropagation();
+    if(cartList.includes(id)) cartList = cartList.filter(i => i !== id);
+    else cartList.push(id);
+    load();
+}
+
 function toggleCompare(e, id) {
     if(e) e.stopPropagation();
     if(compareList.includes(id)) {
@@ -480,127 +496,6 @@ function toggleCompare(e, id) {
     } else {
         if(compareList.length >= 2) compareList.shift();
         compareList.push(id);
-    }
-    load();
-}
-
-function updateCompareUI() {
-    const bar = document.getElementById("compareBar");
-    if(compareList.length > 0) {
-        bar.style.display = "flex";
-        document.getElementById("compareText").innerText = `${compareList.length} equipo${compareList.length > 1 ? 's' : ''} para comparar`;
-    } else {
-        bar.style.display = "none";
-    }
-}
-
-function openCompareModal() {
-    const p1 = phones.find(x => x.id === compareList[0]);
-    const p2 = phones.find(x => x.id === compareList[1]);
-    
-    if(!p2) { alert("Selecciona otro equipo para comparar"); return; }
-
-    document.getElementById("modalContent").innerHTML = `
-        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
-        <h2 style="text-align:center; margin-bottom:30px;">Comparativa</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-            <div style="text-align:center">
-                <img src="${p1.img}" style="height:100px; object-fit:contain;">
-                <h4 style="margin:10px 0;">${p1.name}</h4>
-            </div>
-            <div style="text-align:center">
-                <img src="${p2.img}" style="height:100px; object-fit:contain;">
-                <h4 style="margin:10px 0;">${p2.name}</h4>
-            </div>
-        </div>
-        <table style="width:100%; margin-top:20px; border-collapse:collapse; font-size:14px;">
-            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Precio</td><td style="color:var(--accent)">Q${p1.price}</td><td style="color:var(--accent)">Q${p2.price}</td></tr>
-            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">RAM</td><td>${p1.ram}</td><td>${p2.ram}</td></tr>
-            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Cámara</td><td>${p1.cam}</td><td>${p2.cam}</td></tr>
-            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Batería</td><td>${p1.bat}</td><td>${p2.bat}</td></tr>
-            <tr><td style="padding:10px; font-weight:bold;">Marca</td><td>${p1.brand}</td><td>${p2.brand}</td></tr>
-        </table>
-    `;
-    document.getElementById("modal").style.display = "flex";
-}
-
-function showDetail(id) {
-    const p = phones.find(x => x.id === id);
-    const inCart = cartList.includes(id);
-    const pRev = reviews[id] || [];
-    let reviewsHtml = pRev.length > 0 ? pRev.map(r => `
-        <div style="background:var(--bg-specs); padding:10px; border-radius:10px; margin-bottom:10px; font-size:13px;">
-            <div style="color:var(--stars); margin-bottom:3px;">${'★'.repeat(r.stars)}</div>
-            ${r.text}
-        </div>
-    `).reverse().join('') : '<p style="font-size:12px; opacity:0.5; text-align:center;">No hay reseñas aún.</p>';
-
-    document.getElementById("modalContent").innerHTML = `
-        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
-        <div style="display:flex; flex-direction:column; align-items:center;">
-            <img src="${p.img}" style="width:180px; margin-bottom:20px;">
-            <h2 style="margin:0; text-align:center;">${p.name}</h2>
-            <div class="price" style="font-size:28px">Q${p.price.toLocaleString()}</div>
-            <div style="width:100%; display:grid; grid-template-columns: 1fr 1fr; gap:10px; text-align:left; background:var(--bg-specs); padding:20px; border-radius:20px; margin:20px 0; font-size:14px;">
-                <div><b>RAM:</b> ${p.ram}</div>
-                <div><b>Cámara:</b> ${p.cam}</div>
-                <div><b>Batería:</b> ${p.bat}</div>
-                <div><b>Marca:</b> ${p.brand}</div>
-            </div>
-            <button class="btn-cart-add ${inCart ? 'active' : ''}" style="width:100%; padding:18px; font-size:16px;" onclick="toggleCart(null, ${p.id}); closeModal();">
-                <i class="fas ${inCart ? 'fa-trash' : 'fa-cart-plus'}"></i> ${inCart ? 'Eliminar del pedido' : 'Agregar al pedido'}
-            </button>
-        </div>
-        <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
-            <h3 style="margin-bottom:15px;">Reseñas</h3>
-            <div style="background:var(--bg-specs); padding:20px; border-radius:20px; margin-bottom:20px;">
-                <div style="color:#ccc; font-size:24px; margin-bottom:15px;" id="starInput">
-                    ${[1,2,3,4,5].map(n => `<i class="fas fa-star ${n<=selectedRating?'active':''}" style="cursor:pointer; color:${n<=selectedRating?'var(--stars)':'#ccc'}" onclick="setRating(${n})"></i>`).join('')}
-                </div>
-                <textarea id="revText" placeholder="Cuéntanos tu experiencia..." style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-main); font-family:inherit; resize:none; box-sizing:border-box;"></textarea>
-                <button onclick="saveReview(${p.id})" style="margin-top:10px; width:100%; padding:10px; border-radius:10px; border:none; background:var(--accent); color:white; font-weight:bold; cursor:pointer;">Publicar Reseña</button>
-            </div>
-            <div id="reviewsList">${reviewsHtml}</div>
-        </div>
-    `;
-    document.getElementById("modal").style.display = "flex";
-}
-
-// FUNCIONES DE SOPORTE FALTANTES
-function setRating(n) {
-    selectedRating = n;
-    const stars = document.querySelectorAll('#starInput i');
-    stars.forEach((s, i) => {
-        s.style.color = i < n ? 'var(--stars)' : '#ccc';
-    });
-}
-
-function saveReview(id) {
-    const text = document.getElementById('revText').value;
-    if(!text.trim()) return alert("Escribe un comentario");
-    if(!reviews[id]) reviews[id] = [];
-    reviews[id].push({stars: selectedRating, text: text});
-    localStorage.setItem('jazz_revs_v7', JSON.stringify(reviews));
-    showDetail(id);
-}
-
-function toggleFavorite(e, id) {
-    if(e) e.stopPropagation();
-    if(favorites.includes(id)) {
-        favorites = favorites.filter(f => f !== id);
-    } else {
-        favorites.push(id);
-    }
-    localStorage.setItem('jazz_favs', JSON.stringify(favorites));
-    load();
-}
-
-function toggleCart(e, id) {
-    if(e) e.stopPropagation();
-    if(cartList.includes(id)) {
-        cartList = cartList.filter(c => c !== id);
-    } else {
-        cartList.push(id);
     }
     load();
 }
@@ -616,46 +511,122 @@ function updateCartUI() {
     }
 }
 
-function openCartModal() {
-    const items = cartList.map(id => phones.find(p => p.id === id));
-    const total = items.reduce((a,b) => a + b.price, 0);
+function updateCompareUI() {
+    const bar = document.getElementById("compareBar");
+    if(compareList.length > 0) {
+        bar.style.display = "flex";
+        document.getElementById("compareText").innerText = `${compareList.length} seleccionado(s)`;
+    } else {
+        bar.style.display = "none";
+    }
+}
+
+function openCompareModal() {
+    const p1 = phones.find(x => x.id === compareList[0]);
+    const p2 = phones.find(x => x.id === compareList[1]);
     
+    if(!p2) { alert("Selecciona otro equipo para comparar"); return; }
+
     document.getElementById("modalContent").innerHTML = `
         <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
-        <h2 style="text-align:center;">Tu Pedido</h2>
-        <div style="margin:20px 0;">
-            ${items.map(p => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border);">
-                    <span>${p.name}</span>
-                    <b>Q${p.price}</b>
-                </div>
-            `).join('')}
-            <div style="display:flex; justify-content:space-between; padding:20px 0; font-size:20px; font-weight:800; color:var(--accent);">
-                <span>Total:</span>
-                <span>Q${total.toLocaleString()}</span>
-            </div>
+        <h2 style="text-align:center; margin-bottom:30px;">Comparativa</h2>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div style="text-align:center"><img src="${p1.img}" style="height:100px; object-fit:contain;"><h4>${p1.name}</h4></div>
+            <div style="text-align:center"><img src="${p2.img}" style="height:100px; object-fit:contain;"><h4>${p2.name}</h4></div>
         </div>
-        <button onclick="sendWhatsApp()" style="width:100%; padding:18px; border-radius:15px; border:none; background:var(--success); color:white; font-size:18px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
-            <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
-        </button>
+        <table style="width:100%; margin-top:20px; border-collapse:collapse; font-size:14px;">
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Precio</td><td>Q${p1.price}</td><td>Q${p2.price}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">RAM/Modelo</td><td>${p1.ram}</td><td>${p2.ram}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Cámara/Info</td><td>${p1.cam}</td><td>${p2.cam}</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:10px; font-weight:bold;">Batería</td><td>${p1.bat}</td><td>${p2.bat}</td></tr>
+        </table>
+    `;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function showDetail(id) {
+    const p = phones.find(x => x.id === id);
+    const inCart = cartList.includes(id);
+    const pRev = reviews[id] || [];
+    let reviewsHtml = pRev.length > 0 ? pRev.map(r => `
+        <div style="background:var(--bg-specs); padding:10px; border-radius:10px; margin-bottom:10px; font-size:13px;">
+            <div style="color:var(--stars); margin-bottom:3px;">${'★'.repeat(r.stars)}</div>
+            ${r.text}
+        </div>
+    `).reverse().join('') : '<p style="font-size:12px; opacity:0.5; text-align:center;">No hay reseñas.</p>';
+
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <div style="display:flex; flex-direction:column; align-items:center;">
+            <img src="${p.img}" style="width:180px; margin-bottom:20px;">
+            <h2 style="margin:0; text-align:center;">${p.name}</h2>
+            <div class="price" style="font-size:28px">Q${p.price.toLocaleString()}</div>
+            <div style="width:100%; display:grid; grid-template-columns: 1fr 1fr; gap:10px; text-align:left; background:var(--bg-specs); padding:20px; border-radius:20px; margin:20px 0; font-size:14px;">
+                <div><b>Specs 1:</b> ${p.ram}</div>
+                <div><b>Specs 2:</b> ${p.cam}</div>
+                <div><b>Specs 3:</b> ${p.bat}</div>
+                <div><b>Marca:</b> ${p.brand}</div>
+            </div>
+            <button class="btn-cart-add ${inCart ? 'active' : ''}" style="width:100%; padding:18px; font-size:16px;" onclick="toggleCart(null, ${p.id}); closeModal();">
+                <i class="fas ${inCart ? 'fa-trash' : 'fa-cart-plus'}"></i> ${inCart ? 'Quitar del pedido' : 'Añadir al pedido'}
+            </button>
+        </div>
+        <div style="margin-top:30px; border-top:1px solid var(--border); padding-top:20px;">
+            <h3>Opiniones</h3>
+            <div style="background:var(--bg-specs); padding:20px; border-radius:20px; margin-bottom:20px;">
+                <div style="color:#ccc; font-size:24px; margin-bottom:15px;" id="starInput">
+                    ${[1,2,3,4,5].map(n => `<i class="fas fa-star" style="cursor:pointer; color:${n<=selectedRating?'var(--stars)':'#ccc'}" onclick="setRating(${n})"></i>`).join('')}
+                </div>
+                <textarea id="revText" placeholder="Tu opinión..." style="width:100%; border:1px solid var(--border); border-radius:10px; padding:10px; height:80px;"></textarea>
+                <button onclick="addReview(${p.id})" style="margin-top:10px; background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">Publicar</button>
+            </div>
+            <div id="reviewsList">${reviewsHtml}</div>
+        </div>
+    `;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function setRating(n) {
+    selectedRating = n;
+    const stars = document.querySelectorAll('#starInput i');
+    stars.forEach((s, i) => s.style.color = (i < n) ? 'var(--stars)' : '#ccc');
+}
+
+function addReview(id) {
+    const text = document.getElementById("revText").value;
+    if(!text) return;
+    if(!reviews[id]) reviews[id] = [];
+    reviews[id].push({stars: selectedRating, text: text});
+    localStorage.setItem('jazz_revs_v7', JSON.stringify(reviews));
+    showDetail(id);
+    load();
+}
+
+function openCartModal() {
+    const total = cartList.reduce((acc, id) => acc + phones.find(p => p.id === id).price, 0);
+    document.getElementById("modalContent").innerHTML = `
+        <span onclick="closeModal()" style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px;">&times;</span>
+        <h2 style="text-align:center; margin-bottom:20px;"><i class="fas fa-shopping-cart"></i> Tu Carrito</h2>
+        <div style="max-height:300px; overflow-y:auto; margin-bottom:20px;">
+            ${cartList.map(id => {
+                const p = phones.find(x => x.id === id);
+                return `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border);"><span>${p.name}</span><b>Q${p.price.toLocaleString()}</b></div>`;
+            }).join('')}
+            <div style="display:flex; justify-content:space-between; padding:20px 0; font-size:20px; font-weight:800; color:var(--accent);"><span>Total:</span><span>Q${total.toLocaleString()}</span></div>
+        </div>
+        <button onclick="sendWhatsApp()" style="width:100%; padding:18px; border-radius:15px; border:none; background:var(--success); color:white; font-size:18px; font-weight:bold; cursor:pointer;"><i class="fab fa-whatsapp"></i> Confirmar pedido</button>
     `;
     document.getElementById("modal").style.display = "flex";
 }
 
 function sendWhatsApp() {
-    const items = cartList.map(id => phones.find(p => p.id === id));
-    const total = items.reduce((a,b) => a + b.price, 0);
-    let msg = `Hola JAZZCEL, me interesan estos equipos:%0A%0A`;
-    items.forEach(p => msg += `- ${p.name} (Q${p.price})%0A`);
-    msg += `%0A*Total: Q${total}*%0A¿Tienen disponibilidad?`;
-    window.open(`https://wa.me/502XXXXXXXX?text=${msg}`); // Cambia las X por tu número
+    const msg = "Hola JAZZCEL, quiero pedir esto:\n" + cartList.map(id => "- " + phones.find(p => p.id === id).name).join("\n");
+    window.open(`https://wa.me/502XXXXXXXX?text=${encodeURIComponent(msg)}`);
 }
 
 function closeModal() { document.getElementById("modal").style.display = "none"; }
 
-// Carga inicial
 load();
 </script>
-
 </body>
 </html>
